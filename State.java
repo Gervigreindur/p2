@@ -55,8 +55,8 @@ public class State {
 				}
 			}
 		}
-		System.out.println("black size: " + blackPawns.size() );
-		System.out.println("white size: " + whitePawns.size() );
+//		System.out.println("black size: " + blackPawns.size() );
+//		System.out.println("white size: " + whitePawns.size() );
 	}
 	
 	public int getBlackPawnsLeft() {
@@ -120,8 +120,8 @@ public class State {
 				//todo: send all possible actions for white player
 				int y1 = (int) blackPawns.get(x).getLeft();
 				int x1 = (int) blackPawns.get(x).getRight();
-				System.out.println(x1);
-				System.out.println(y1);
+//				System.out.println(x1);
+//				System.out.println(y1);
 				if(y1 - 1 >= 0)
 				{
 					if(board.get(y1 - 1).get(x1).equals(Square.empty))
@@ -167,8 +167,13 @@ public class State {
 		x2 -= 1;
 		y1 -= 1;
 		y2 -= 1;
-
-		if(board.get(y1).get(x1).equals(Square.valueOf(role)))
+		board.get(y1).set(x1, Square.empty);
+		if (role == "white") {
+			board.get(y2).set(x2, Square.white);
+		} else {
+			board.get(y2).set(x2, Square.black);
+		}
+		/*if(board.get(y1).get(x1).equals(Square.valueOf(role)))
 		{
 			
 			//Set old square as empty
@@ -188,7 +193,7 @@ public class State {
 			}
 			board.get(y2).set(x2, Square.valueOf(role));
 			
-		}
+		}*/
 	}
 	
 	
@@ -219,12 +224,19 @@ public class State {
 	
 	public void printBoard()
 	{
-        for (int i = 0; i < board.size(); i++) 
+        for (int i = board.size()-1; i >= 0; i--) 
         {
         	for(int j = 0; j < board.get(i).size(); j++)
         	{
-        		System.out.println("square x,y: " + (j+1) + ", " + (i+1) + " " + board.get(i).get(j));
+        		if (j != board.get(i).size() - 1){
+        			System.out.print(board.get(i).get(j) + " | ");
+        		} else {
+        			System.out.print(board.get(i).get(j));
+        		}
+        		
         	}
+        	System.out.println();
+        	System.out.println("--------------------");
         }
 	}
 }
