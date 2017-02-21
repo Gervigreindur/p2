@@ -65,18 +65,75 @@ public class State {
 		return whitePawns.size();
 	}
 
-	public ArrayList<Integer>legalActions(String role)
+	public ArrayList<Integer>legalActions(String role) throws Exception
 	{
-		
+		ArrayList<Integer> legal = new ArrayList<Integer>();
 		if(role.equals("white"))
 		{
 			Set<Integer> set = whitePawns.keySet();
 			for(Integer x : set)
 			{
-				
 				//todo: send all possible actions for white player
-				
+				int x1 = (int) whitePawns.get(x).getLeft();
+				int y1 = (int) whitePawns.get(x).getRight();
+				if(!(board.get(y1 + 1).get(x1).equals(Square.white)) && ((y1+ 1) > height))
+				{
+					legal.add(y1 + 1);
+					legal.add(x1 + 1);
+					legal.add(y1 + 2);
+					legal.add(x1 + 1);
+				}
+				if(!(board.get(y1 + 1).get(x1 - 1).equals(Square.white)) && ((y1+1) > height && (x1 - 1) >= 0))
+				{
+					legal.add(y1 + 1);
+					legal.add(x1 + 1);
+					legal.add(y1 + 2);
+					legal.add(x1 - 2);
+				}
+				if(!(board.get(y1 + 1).get(x1 + 1).equals(Square.white)) && ((y1+1) > height && (x1 + 1) >= width))
+				{
+					legal.add(y1 + 1);
+					legal.add(x1 + 1);
+					legal.add(y1 + 2);
+					legal.add(x1 + 2);
+				}
+							
 			}
+		}
+		else if(role.equals("black"))
+		{
+			Set<Integer> set = blackPawns.keySet();
+			for(Integer x : set)
+			{
+				//todo: send all possible actions for white player
+				int x1 = (int) blackPawns.get(x).getLeft();
+				int y1 = (int) blackPawns.get(x).getRight();
+				if(!(board.get(y1 - 1).get(x1).equals(Square.black)) && ((y1 - 1) > 0))
+				{
+					legal.add(y1 - 1);
+					legal.add(x1 + 1);
+					legal.add(y1 + 2);
+					legal.add(x1 + 1);
+				}
+				if(!(board.get(y1 + 1).get(x1 - 1).equals(Square.black)) && ((y1+1) > height && (x1 - 1) >= 0))
+				{
+					legal.add(y1 + 1);
+					legal.add(x1 + 1);
+					legal.add(y1 + 2);
+					legal.add(x1 - 2);
+				}
+				if(!(board.get(y1 + 1).get(x1 + 1).equals(Square.black)) && ((y1+1) > height && (x1 + 1) >= width))
+				{
+					legal.add(y1 + 1);
+					legal.add(x1 + 1);
+					legal.add(y1 + 2);
+					legal.add(x1 + 2);
+				}			
+			}
+		}
+		else
+		{
+			throw new Exception("role not accepted in legal Actions function!");
 		}
 		return new ArrayList<Integer>();
 	}
