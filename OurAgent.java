@@ -24,7 +24,6 @@ public class OurAgent implements Agent
 		this.height = height;
 		// TODO: add your own initialization code here
 		environment = new State(height, width);
-		//environment.printBoard();
     }
 
 	// lastMove is null the first time nextAction gets called (in the initial state)
@@ -42,7 +41,7 @@ public class OurAgent implements Agent
    			System.out.println(roleOfLastPlayer + " moved from " + x1 + "," + y1 + " to " + x2 + "," + y2);
     		// TODO: 1. update your internal world model according to the action that was just executed
     		environment.updateState(x1, y1, x2, y2, roleOfLastPlayer);
-    		//environment.printBoard();
+    		environment.printBoard();
     	}
 		
     	// update turn (above this line the myTurn is still for the previous state)
