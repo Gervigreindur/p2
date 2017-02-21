@@ -1,14 +1,18 @@
-package prog2;
+package p2;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class State {
-	private int whitePawnsLeft;
-	private int blackPawnsLeft;
+	
 	private int height;
 	private int width;
 	private List<ArrayList<Square>> board;
+	private Map<Integer, Pair> whitePawns;
+	private Map<Integer, Pair> blackPawns;
 	
 	private enum Square
 	{
@@ -24,13 +28,13 @@ public class State {
 		{
 			board.add(new ArrayList<Square>());
 		}
+		whitePawns = new HashMap<Integer, Pair>();
+		blackPawns = new HashMap<Integer, Pair>();
 		setInitialBoard();
 	}
 	
 	public void setInitialBoard()
 	{
-		whitePawnsLeft = 0;
-		blackPawnsLeft = 0;
 		for(int y = 0; y < height; y++)
 		{
 			for(int x = 0; x < width; x++)
@@ -38,12 +42,12 @@ public class State {
 				if(y < 2)
 				{
 					board.get(y).add(Square.white);
-					whitePawnsLeft++;
+					whitePawns.put(whitePawns.size() + 1, new Pair(y, x));
 				}
 				else if(y > (height - 3))
 				{
 					board.get(y).add(Square.black);
-					blackPawnsLeft++;
+					blackPawns.put(blackPawns.size() + 1, new Pair(y, x));
 				}
 				else
 				{
@@ -53,6 +57,29 @@ public class State {
 		}
 	}
 	
+	public int getBlackPawnsLeft() {
+		return blackPawns.size();
+	}
+
+	public int getWhitePawnsLeft() {
+		return whitePawns.size();
+	}
+
+	public ArrayList<Integer>legalActions(String role)
+	{
+		
+		if(role.equals("white"))
+		{
+			Set<Integer> set = whitePawns.keySet();
+			for(Integer x : set)
+			{
+				
+				//todo: send all possible actions for white player
+				
+			}
+		}
+		return new ArrayList<Integer>();
+	}
 
 	public void updateState(int x1, int y1, int x2, int y2, String role)
 	{
@@ -72,11 +99,11 @@ public class State {
 			{
 				if(Square.valueOf(role).equals(Square.white))
 				{
-					whitePawnsLeft--;
+					
 				}
 				else
 				{
-					blackPawnsLeft--;
+					
 				}
 			}
 			board.get(y2).set(x2, Square.valueOf(role));

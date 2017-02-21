@@ -1,4 +1,4 @@
-package prog2;
+package p2;
 
 public class Main {
 	

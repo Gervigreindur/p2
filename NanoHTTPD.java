@@ -1,4 +1,4 @@
-package prog2;
+package p2;
 
 import java.io.*;
 import java.util.*;
