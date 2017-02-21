@@ -11,8 +11,8 @@ public class State {
 	private int height;
 	private int width;
 	private List<ArrayList<Square>> board;
-	private Map<Integer, Pair> whitePawns;
-	private Map<Integer, Pair> blackPawns;
+	private Map<Integer, Pair<Integer, Integer>> whitePawns;
+	private Map<Integer, Pair<Integer, Integer>> blackPawns;
 	
 	private enum Square
 	{
@@ -28,8 +28,8 @@ public class State {
 		{
 			board.add(new ArrayList<Square>());
 		}
-		whitePawns = new HashMap<Integer, Pair>();
-		blackPawns = new HashMap<Integer, Pair>();
+		whitePawns = new HashMap<Integer, Pair<Integer, Integer>>();
+		blackPawns = new HashMap<Integer, Pair<Integer, Integer>>();
 		setInitialBoard();
 	}
 	
@@ -42,12 +42,12 @@ public class State {
 				if(y < 2)
 				{
 					board.get(y).add(Square.white);
-					whitePawns.put(whitePawns.size() + 1, new Pair(y, x));
+					whitePawns.put(whitePawns.size() + 1, new Pair<Integer, Integer>(y, x));
 				}
 				else if(y > (height - 3))
 				{
 					board.get(y).add(Square.black);
-					blackPawns.put(blackPawns.size() + 1, new Pair(y, x));
+					blackPawns.put(blackPawns.size() + 1, new Pair<Integer, Integer>(y, x));
 				}
 				else
 				{
@@ -76,21 +76,21 @@ public class State {
 				//todo: send all possible actions for white player
 				int x1 = (int) whitePawns.get(x).getLeft();
 				int y1 = (int) whitePawns.get(x).getRight();
-				if(!(board.get(y1 + 1).get(x1).equals(Square.white)) && ((y1+ 1) > height))
+				if(board.get(y1 + 1).get(x1).equals(Square.empty) && ((y1+ 1) > height))
 				{
 					legal.add(y1 + 1);
 					legal.add(x1 + 1);
 					legal.add(y1 + 2);
 					legal.add(x1 + 1);
 				}
-				if(!(board.get(y1 + 1).get(x1 - 1).equals(Square.white)) && ((y1+1) > height && (x1 - 1) >= 0))
+				if(board.get(y1 + 1).get(x1 - 1).equals(Square.black) && ((y1+1) > height && (x1 - 1) >= 0))
 				{
 					legal.add(y1 + 1);
 					legal.add(x1 + 1);
 					legal.add(y1 + 2);
 					legal.add(x1 - 2);
 				}
-				if(!(board.get(y1 + 1).get(x1 + 1).equals(Square.white)) && ((y1+1) > height && (x1 + 1) >= width))
+				if(board.get(y1 + 1).get(x1 + 1).equals(Square.black) && ((y1+1) > height && (x1 + 1) < width))
 				{
 					legal.add(y1 + 1);
 					legal.add(x1 + 1);
@@ -110,23 +110,24 @@ public class State {
 				int y1 = (int) blackPawns.get(x).getRight();
 				if(!(board.get(y1 - 1).get(x1).equals(Square.black)) && ((y1 - 1) > 0))
 				{
-					legal.add(y1 - 1);
+					legal.add(y1 + 1);
 					legal.add(x1 + 1);
-					legal.add(y1 + 2);
+					
+					legal.add(y1);
 					legal.add(x1 + 1);
 				}
-				if(!(board.get(y1 + 1).get(x1 - 1).equals(Square.black)) && ((y1+1) > height && (x1 - 1) >= 0))
+				if(!(board.get(y1 - 1).get(x1 - 1).equals(Square.black)) && ((y1 - 1) > 0 && (x1 - 1) >= 0))
 				{
 					legal.add(y1 + 1);
 					legal.add(x1 + 1);
-					legal.add(y1 + 2);
-					legal.add(x1 - 2);
+					legal.add(y1);
+					legal.add(x1);
 				}
-				if(!(board.get(y1 + 1).get(x1 + 1).equals(Square.black)) && ((y1+1) > height && (x1 + 1) >= width))
+				if(!(board.get(y1 - 1).get(x1 + 1).equals(Square.black)) && ((y1 - 1) > 0 && (x1 + 1) < width))
 				{
 					legal.add(y1 + 1);
 					legal.add(x1 + 1);
-					legal.add(y1 + 2);
+					legal.add(y1);
 					legal.add(x1 + 2);
 				}			
 			}
