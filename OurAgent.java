@@ -24,36 +24,33 @@ public class OurAgent implements Agent
 		this.height = height;
 		// TODO: add your own initialization code here
 		environment = new State(height, width);
-		
+		//environment.printBoard();
     }
 
 	// lastMove is null the first time nextAction gets called (in the initial state)
     // otherwise it contains the coordinates x1,y1,x2,y2 of the move that the last player did
     public String nextAction(int[] lastMove) {
+    	String roleOfLastPlayer = "";
     	if (lastMove != null) {
     		int x1 = lastMove[0], y1 = lastMove[1], x2 = lastMove[2], y2 = lastMove[3];
-    		String roleOfLastPlayer;
+    		
     		if (myTurn && role.equals("white") || !myTurn && role.equals("black")) {
     			roleOfLastPlayer = "white";
     		} else {
     			roleOfLastPlayer = "black";
     		}
-    		environment.printBoard();
    			System.out.println(roleOfLastPlayer + " moved from " + x1 + "," + y1 + " to " + x2 + "," + y2);
     		// TODO: 1. update your internal world model according to the action that was just executed
-   			System.out.println(roleOfLastPlayer);
     		environment.updateState(x1, y1, x2, y2, roleOfLastPlayer);
-    		ArrayList<Integer> x = environment.legalActions(roleOfLastPlayer);
-    		System.out.println(x);
-    		environment.printBoard();
+    		//environment.printBoard();
     	}
 		
-    	// update turn (above that line it myTurn is still for the previous state)
+    	// update turn (above this line the myTurn is still for the previous state)
 		myTurn = !myTurn;
 		if (myTurn) {
 			// TODO: 2. run alpha-beta search to determine the best move
-
-			
+			ArrayList<Integer> x = environment.legalActions(roleOfLastPlayer);
+			System.out.println("legal moves: " + x);
 			// Here we just construct a random move (that will most likely not even be possible),
 			// this needs to be replaced with the actual best move.
 			int x1,y1,x2,y2;
@@ -76,7 +73,7 @@ public class OurAgent implements Agent
 	// is called when the game is over or the match is aborted
 	@Override
 	public void cleanup() {
-		//environment.initialize();
 		// TODO: cleanup so that the agent is ready for the next match
+		environment.setInitialBoard();
 	}
 }

@@ -2,8 +2,8 @@ package p2;
 
 public class Pair<L,R> {
 
-  private final L left;
-  private final R right;
+  private L left;
+  private R right;
 
   public Pair(L left, R right) {
 	  this.left = left;
@@ -23,6 +23,11 @@ public class Pair<L,R> {
 	  
 	  return this.left.equals(pairo.getLeft()) && this.right.equals(pairo.getRight());
   }
+
+public void change(L x, R y) {
+	this.left = x; 
+	this.right = y;
+}
 
 
 }

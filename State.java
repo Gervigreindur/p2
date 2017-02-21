@@ -10,10 +10,10 @@ public class State {
 	
 	private int height;
 	private int width;
-	private List<ArrayList<Square>> board;
 	private Map<Integer, Pair<Integer, Integer>> whitePawns;
 	private Map<Integer, Pair<Integer, Integer>> blackPawns;
-	
+	private Map<Pair<Integer, Integer>, Square> board;
+	private Pair<Integer, Integer> coord;
 	private enum Square
 	{
 		white, black, empty
@@ -23,40 +23,35 @@ public class State {
 	{
 		this.height = height;
 		this.width = width;
-		board = new ArrayList<ArrayList<Square>>();
-		for(int i = 0; i < height; i++)
-		{
-			board.add(new ArrayList<Square>());
-		}
+		coord = new Pair<Integer, Integer>(0, 0);
 		whitePawns = new HashMap<Integer, Pair<Integer, Integer>>();
 		blackPawns = new HashMap<Integer, Pair<Integer, Integer>>();
+		board = new HashMap<Pair<Integer, Integer>, Square>();
 		setInitialBoard();
 	}
-	
+
 	public void setInitialBoard()
 	{
-		for(int y = 0; y < height; y++)
+		for(int y = 1; y <= height; y++)
 		{
-			for(int x = 0; x < width; x++)
+			for(int x = 1; x <= width; x++)
 			{
-				if(y < 2)
+				if(y <= 2)
 				{
-					board.get(y).add(Square.white);
-					whitePawns.put(whitePawns.size() , new Pair<Integer, Integer>(y, x));
+					board.put(new Pair<Integer, Integer>(x, y), Square.white);
+					whitePawns.put(whitePawns.size() , new Pair<Integer, Integer>(x, y));
 				}
-				else if(y > (height - 3))
+				else if(y > (height - 2))
 				{
-					board.get(y).add(Square.black);
-					blackPawns.put(blackPawns.size(), new Pair<Integer, Integer>(y, x));
+					board.put(new Pair<Integer, Integer>(x, y), Square.black);
+					blackPawns.put(blackPawns.size() , new Pair<Integer, Integer>(x, y));
 				}
 				else
 				{
-					board.get(y).add(Square.empty);
+					board.put(new Pair<Integer, Integer>(x, y), Square.empty);
 				}
 			}
 		}
-//		System.out.println("black size: " + blackPawns.size() );
-//		System.out.println("white size: " + whitePawns.size() );
 	}
 	
 	public int getBlackPawnsLeft() {
@@ -74,40 +69,42 @@ public class State {
 		if(lastRole.equals("black"))
 		{
 			Set<Integer> set = whitePawns.keySet();
-			for(Integer x : set)
+			for(Integer key : set)
 			{
 				//todo: send all possible actions for white player
-				int y1 = (int) whitePawns.get(x).getLeft();
-				int x1 = (int) whitePawns.get(x).getRight();
-				
-				if((y1+ 1) < height)
+				int x1 = (int) whitePawns.get(key).getLeft();
+				int y1 = (int) whitePawns.get(key).getRight();
+				if(y1+1 <= height)
 				{
-					if(board.get(y1 + 1).get(x1).equals(Square.empty))
+					coord.change(x1, y1+1);
+					if(board.get(coord).equals(Square.empty))
 					{
-						legal.add(x1 + 1);
+						legal.add(x1);
+						legal.add(y1);
+						legal.add(x1);
 						legal.add(y1 + 1);
-						legal.add(x1 + 1);
-						legal.add(y1 + 2);
 					}
 				}
-				if(((y1+1) < height && (x1 - 1) >= 0))
+				if(y1+1 <= height && (x1 - 1) > 0)
 				{
-					if(board.get(y1 + 1).get(x1 - 1).equals(Square.black))
+					coord.change(x1 - 1, y1+1);
+					if(board.get(coord).equals(Square.black))
 					{
-						legal.add(x1 + 1);
+						legal.add(x1);
+						legal.add(y1);
+						legal.add(x1 - 1);
 						legal.add(y1 + 1);
-						legal.add(x1 - 2);
-						legal.add(y1 + 2);
 					}
 				}
-				if((y1+1) < height && (x1 + 1) < width)
+				if(y1+1 <= height && x1 + 1 <= width)
 				{
-					if(board.get(y1 + 1).get(x1 + 1).equals(Square.black))
+					coord.change(x1 + 1, y1 + 1);
+					if(board.get(coord).equals(Square.black))
 					{
+						legal.add(x1);
+						legal.add(y1);
 						legal.add(x1 + 1);
 						legal.add(y1 + 1);
-						legal.add(x1 + 2);
-						legal.add(y1 + 2);
 					}
 				}				
 			}
@@ -115,43 +112,45 @@ public class State {
 		else if(lastRole.equals("white"))
 		{
 			Set<Integer> set = blackPawns.keySet();
-			for(Integer x : set)
+			for(Integer key : set)
 			{
 				//todo: send all possible actions for white player
-				int y1 = (int) blackPawns.get(x).getLeft();
-				int x1 = (int) blackPawns.get(x).getRight();
-//				System.out.println(x1);
-//				System.out.println(y1);
-				if(y1 - 1 >= 0)
+				int x1 = (int) blackPawns.get(key).getLeft();
+				int y1 = (int) blackPawns.get(key).getRight();
+				Pair<Integer, Integer> coord = new Pair<Integer,Integer>(x1,y1);
+				if(y1 > 0)
 				{
-					if(board.get(y1 - 1).get(x1).equals(Square.empty))
+					coord.change(x1, y1 - 1);
+					if(board.get(coord).equals(Square.empty))
 					{
-						legal.add(x1 + 1);
-						legal.add(y1 + 1);
-						legal.add(x1 + 1);						
-						legal.add(y1);
-					}
-				}
-				if( (y1 - 1) >= 0 && (x1 - 1) >= 0)
-				{
-					if(board.get(y1 - 1).get(x1 - 1).equals(Square.white))
-					{
-						legal.add(x1 + 1);
-						legal.add(y1 + 1);
 						legal.add(x1);
 						legal.add(y1);
+						legal.add(x1);
+						legal.add(y1 - 1);
 					}
 				}
-				if((y1 - 1) >= 0 && (x1 + 1) < width)
+				if(y1 - 1 > 0 && (x1 - 1) > 0)
 				{
-					if(board.get(y1 - 1).get(x1 + 1).equals(Square.white))
+					coord.change(x1 - 1, y1 - 1);
+					if(board.get(coord).equals(Square.white))
 					{
-						legal.add(x1 + 1);
-						legal.add(y1 + 1);
-						legal.add(x1 + 2);
-						legal.add(y1);					
-					}		
+						legal.add(x1);
+						legal.add(y1);
+						legal.add(x1 - 1);
+						legal.add(y1 - 1);
+					}
 				}
+				if(y1 - 1 > 0 && x1 + 1 <= width)
+				{
+					coord.change(x1 + 1, y1 - 1);
+					if(board.get(coord).equals(Square.white))
+					{
+						legal.add(x1);
+						legal.add(y1);
+						legal.add(x1 + 1);
+						legal.add(y1 - 1);
+					}
+				}				
 			}
 		}
 		else
@@ -162,44 +161,60 @@ public class State {
 	}
 
 	public void updateState(int x1, int y1, int x2, int y2, String role)
-	{
-		x1 -= 1;
-		x2 -= 1;
-		y1 -= 1;
-		y2 -= 1;
-		board.get(y1).set(x1, Square.empty);
+	{	
+		Set<Integer> set;
+		coord.change(x1, y1);
+		board.put(coord, Square.empty);	
 		if (role == "white") {
-			board.get(y2).set(x2, Square.white);
-		} else {
-			board.get(y2).set(x2, Square.black);
-		}
-		/*if(board.get(y1).get(x1).equals(Square.valueOf(role)))
-		{
-			
-			//Set old square as empty
-			board.get(y1).set(x1, Square.empty);
-			
-			//set new position for player move
-			if(!board.get(y2).get(x2).equals(Square.empty))
+			set = whitePawns.keySet();
+			for(Integer key : set)
 			{
-				if(Square.valueOf(role).equals(Square.white))
+				if(whitePawns.get(key).equals(board.get(coord)))
 				{
-					
-				}
-				else
+					coord.change(x2, y2);
+					whitePawns.put(key, coord);
+				}				
+			}
+			if(board.get(coord).equals(Square.black))
+			{
+				set = blackPawns.keySet();
+				for(Integer key : set)
 				{
-					
+					if(board.get(coord).equals(blackPawns.get(key)))
+					{
+						blackPawns.remove(key);
+					}
 				}
 			}
-			board.get(y2).set(x2, Square.valueOf(role));
-			
-		}*/
-	}
-	
-	
-	public Square getSquare(int x, int y)
-	{
-		return board.get(y - 1).get(x - 1);
+			board.put(coord, Square.white);
+		} else {
+			set = blackPawns.keySet();
+			for(Integer key : set)
+			{
+				if(blackPawns.get(key).equals(board.get(coord)))
+				{
+					coord.change(x2, y2);
+					blackPawns.put(key, coord);
+				}				
+			}
+			if(board.get(coord).equals(Square.white))
+			{
+				set = whitePawns.keySet();
+				for(Integer key : set)
+				{
+					if(board.get(coord).equals(whitePawns.get(key)))
+					{
+						whitePawns.remove(key);
+					}
+				}
+			}
+			board.put(coord, Square.black);
+		}
+		Set<Pair<Integer, Integer>> seti = board.keySet();
+		for(Pair<Integer, Integer> g : seti)
+		{
+			System.out.println("x, y: " + g.getLeft() + " " + g.getRight() + board.get(g));
+		}
 	}
 	
 	public void printPawns()
@@ -208,7 +223,6 @@ public class State {
 		System.out.println("black pawns:");
 		for(Integer x : set)
 		{
-			
 			System.out.println("left: " + blackPawns.get(x).getLeft());
 			System.out.println("right: " + blackPawns.get(x).getRight());
 		}
@@ -224,19 +238,15 @@ public class State {
 	
 	public void printBoard()
 	{
-        for (int i = board.size()-1; i >= 0; i--) 
-        {
-        	for(int j = 0; j < board.get(i).size(); j++)
-        	{
-        		if (j != board.get(i).size() - 1){
-        			System.out.print(board.get(i).get(j) + " | ");
-        		} else {
-        			System.out.print(board.get(i).get(j));
-        		}
-        		
-        	}
-        	System.out.println();
-        	System.out.println("--------------------");
-        }
+		for(int i = height; i > 0; i--)
+		{
+			for(int j = 1; j <= width; j++)
+			{
+				coord.change(j, i);
+				System.out.print(board.get(coord) + " | ");
+			}
+			System.out.println("");
+			System.out.println("--------------------");
+		}
 	}
 }
