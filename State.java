@@ -42,12 +42,12 @@ public class State {
 				if(y < 2)
 				{
 					board.get(y).add(Square.white);
-					whitePawns.put(whitePawns.size() + 1, new Pair<Integer, Integer>(y, x));
+					whitePawns.put(whitePawns.size() , new Pair<Integer, Integer>(y, x));
 				}
 				else if(y > (height - 3))
 				{
 					board.get(y).add(Square.black);
-					blackPawns.put(blackPawns.size() + 1, new Pair<Integer, Integer>(y, x));
+					blackPawns.put(blackPawns.size(), new Pair<Integer, Integer>(y, x));
 				}
 				else
 				{
@@ -55,6 +55,8 @@ public class State {
 				}
 			}
 		}
+		System.out.println("black size: " + blackPawns.size() );
+		System.out.println("white size: " + whitePawns.size() );
 	}
 	
 	public int getBlackPawnsLeft() {
@@ -65,78 +67,98 @@ public class State {
 		return whitePawns.size();
 	}
 
-	public ArrayList<Integer>legalActions(String role) throws Exception
+	public ArrayList<Integer>legalActions(String lastRole)
 	{
+		//printPawns();
 		ArrayList<Integer> legal = new ArrayList<Integer>();
-		if(role.equals("white"))
+		if(lastRole.equals("black"))
 		{
 			Set<Integer> set = whitePawns.keySet();
 			for(Integer x : set)
 			{
 				//todo: send all possible actions for white player
-				int x1 = (int) whitePawns.get(x).getLeft();
-				int y1 = (int) whitePawns.get(x).getRight();
-				if(board.get(y1 + 1).get(x1).equals(Square.empty) && ((y1+ 1) > height))
+				int y1 = (int) whitePawns.get(x).getLeft();
+				int x1 = (int) whitePawns.get(x).getRight();
+				
+				if((y1+ 1) < height)
 				{
-					legal.add(y1 + 1);
-					legal.add(x1 + 1);
-					legal.add(y1 + 2);
-					legal.add(x1 + 1);
+					if(board.get(y1 + 1).get(x1).equals(Square.empty))
+					{
+						legal.add(x1 + 1);
+						legal.add(y1 + 1);
+						legal.add(x1 + 1);
+						legal.add(y1 + 2);
+					}
 				}
-				if(board.get(y1 + 1).get(x1 - 1).equals(Square.black) && ((y1+1) > height && (x1 - 1) >= 0))
+				if(((y1+1) < height && (x1 - 1) >= 0))
 				{
-					legal.add(y1 + 1);
-					legal.add(x1 + 1);
-					legal.add(y1 + 2);
-					legal.add(x1 - 2);
+					if(board.get(y1 + 1).get(x1 - 1).equals(Square.black))
+					{
+						legal.add(x1 + 1);
+						legal.add(y1 + 1);
+						legal.add(x1 - 2);
+						legal.add(y1 + 2);
+					}
 				}
-				if(board.get(y1 + 1).get(x1 + 1).equals(Square.black) && ((y1+1) > height && (x1 + 1) < width))
+				if((y1+1) < height && (x1 + 1) < width)
 				{
-					legal.add(y1 + 1);
-					legal.add(x1 + 1);
-					legal.add(y1 + 2);
-					legal.add(x1 + 2);
-				}
-							
+					if(board.get(y1 + 1).get(x1 + 1).equals(Square.black))
+					{
+						legal.add(x1 + 1);
+						legal.add(y1 + 1);
+						legal.add(x1 + 2);
+						legal.add(y1 + 2);
+					}
+				}				
 			}
 		}
-		else if(role.equals("black"))
+		else if(lastRole.equals("white"))
 		{
 			Set<Integer> set = blackPawns.keySet();
 			for(Integer x : set)
 			{
 				//todo: send all possible actions for white player
-				int x1 = (int) blackPawns.get(x).getLeft();
-				int y1 = (int) blackPawns.get(x).getRight();
-				if(!(board.get(y1 - 1).get(x1).equals(Square.black)) && ((y1 - 1) > 0))
+				int y1 = (int) blackPawns.get(x).getLeft();
+				int x1 = (int) blackPawns.get(x).getRight();
+				System.out.println(x1);
+				System.out.println(y1);
+				if(y1 - 1 >= 0)
 				{
-					legal.add(y1 + 1);
-					legal.add(x1 + 1);
-					
-					legal.add(y1);
-					legal.add(x1 + 1);
+					if(board.get(y1 - 1).get(x1).equals(Square.empty))
+					{
+						legal.add(x1 + 1);
+						legal.add(y1 + 1);
+						legal.add(x1 + 1);						
+						legal.add(y1);
+					}
 				}
-				if(!(board.get(y1 - 1).get(x1 - 1).equals(Square.black)) && ((y1 - 1) > 0 && (x1 - 1) >= 0))
+				if( (y1 - 1) >= 0 && (x1 - 1) >= 0)
 				{
-					legal.add(y1 + 1);
-					legal.add(x1 + 1);
-					legal.add(y1);
-					legal.add(x1);
+					if(board.get(y1 - 1).get(x1 - 1).equals(Square.white))
+					{
+						legal.add(x1 + 1);
+						legal.add(y1 + 1);
+						legal.add(x1);
+						legal.add(y1);
+					}
 				}
-				if(!(board.get(y1 - 1).get(x1 + 1).equals(Square.black)) && ((y1 - 1) > 0 && (x1 + 1) < width))
+				if((y1 - 1) >= 0 && (x1 + 1) < width)
 				{
-					legal.add(y1 + 1);
-					legal.add(x1 + 1);
-					legal.add(y1);
-					legal.add(x1 + 2);
-				}			
+					if(board.get(y1 - 1).get(x1 + 1).equals(Square.white))
+					{
+						legal.add(x1 + 1);
+						legal.add(y1 + 1);
+						legal.add(x1 + 2);
+						legal.add(y1);					
+					}		
+				}
 			}
 		}
 		else
 		{
-			throw new Exception("role not accepted in legal Actions function!");
+			System.out.println("role not accepted in legal Actions function!");
 		}
-		return new ArrayList<Integer>();
+		return legal;
 	}
 
 	public void updateState(int x1, int y1, int x2, int y2, String role)
@@ -169,20 +191,30 @@ public class State {
 		}
 	}
 	
-	public boolean legalAction(Integer from, Integer to, String role)
-	{
-		if(board.get(from).equals(Square.valueOf(role)))
-		{
-			return true;
-		}
-			
-		return false;
-	}
-	
 	
 	public Square getSquare(int x, int y)
 	{
 		return board.get(y - 1).get(x - 1);
+	}
+	
+	public void printPawns()
+	{
+		Set<Integer> set = blackPawns.keySet();
+		System.out.println("black pawns:");
+		for(Integer x : set)
+		{
+			
+			System.out.println("left: " + blackPawns.get(x).getLeft());
+			System.out.println("right: " + blackPawns.get(x).getRight());
+		}
+		set = whitePawns.keySet();
+		System.out.println("white pawns:");
+		for(Integer x : set)
+		{
+			
+			System.out.println("left: " + whitePawns.get(x).getLeft());
+			System.out.println("right: " + whitePawns.get(x).getRight());
+		}
 	}
 	
 	public void printBoard()
@@ -191,7 +223,7 @@ public class State {
         {
         	for(int j = 0; j < board.get(i).size(); j++)
         	{
-        		System.out.println("square y,x: " + (i+1) + ", " + (j+1) + " " + board.get(i).get(j));
+        		System.out.println("square x,y: " + (j+1) + ", " + (i+1) + " " + board.get(i).get(j));
         	}
         }
 	}

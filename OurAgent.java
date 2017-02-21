@@ -1,5 +1,6 @@
 package p2;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 public class OurAgent implements Agent
@@ -11,7 +12,7 @@ public class OurAgent implements Agent
 	private int playclock; // this is how much time (in seconds) we have before nextAction needs to return a move
 	private boolean myTurn; // whether it is this agent's turn or not
 	private int width, height; // dimensions of the board
-	private State enviornment;
+	private State environment;
 	/*
 		init(String role, int playclock) is called once before you have to select the first action. Use it to initialize the agent. role is either "white" or "black" and playclock is the number of seconds after which nextAction must return.
 	*/
@@ -22,7 +23,7 @@ public class OurAgent implements Agent
 		this.width = width;
 		this.height = height;
 		// TODO: add your own initialization code here
-		enviornment = new State(height, width);
+		environment = new State(height, width);
 		
     }
 
@@ -37,11 +38,14 @@ public class OurAgent implements Agent
     		} else {
     			roleOfLastPlayer = "black";
     		}
-    		enviornment.printBoard();
-   			System.out.println(roleOfLastPlayer + " moved from " + y1 + "," + x1 + " to " + y2 + "," + x2);
+    		environment.printBoard();
+   			System.out.println(roleOfLastPlayer + " moved from " + x1 + "," + y1 + " to " + x2 + "," + y2);
     		// TODO: 1. update your internal world model according to the action that was just executed
-    		enviornment.updateState(x1, y1, x2, y2, roleOfLastPlayer);
-    		enviornment.printBoard();
+   			System.out.println(roleOfLastPlayer);
+    		environment.updateState(x1, y1, x2, y2, roleOfLastPlayer);
+    		ArrayList<Integer> x = environment.legalActions(roleOfLastPlayer);
+    		System.out.println(x);
+    		environment.printBoard();
     	}
 		
     	// update turn (above that line it myTurn is still for the previous state)
@@ -72,7 +76,7 @@ public class OurAgent implements Agent
 	// is called when the game is over or the match is aborted
 	@Override
 	public void cleanup() {
-		//enviornment.initialize();
+		//environment.initialize();
 		// TODO: cleanup so that the agent is ready for the next match
 	}
 }
