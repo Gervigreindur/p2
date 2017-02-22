@@ -40,7 +40,8 @@ public class OurAgent implements Agent
     		}
    			System.out.println(roleOfLastPlayer + " moved from " + x1 + "," + y1 + " to " + x2 + "," + y2);
     		// TODO: 1. update your internal world model according to the action that was just executed
-    		environment.updateState(x1, y1, x2, y2, roleOfLastPlayer);
+   			
+    		environment.updateState(new Pair<Integer, Integer>(x1, y1), new Pair<Integer, Integer>(x2, y2), roleOfLastPlayer);
     		environment.printBoard();
     		environment.printPawns();
     		ArrayList<Integer> x = environment.legalActions(roleOfLastPlayer);

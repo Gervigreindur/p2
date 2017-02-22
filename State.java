@@ -161,62 +161,59 @@ public class State {
 		return legal;
 	}
 
-	public void updateState(int x1, int y1, int x2, int y2, String role)
+	public void updateState(Pair<Integer, Integer> from,Pair<Integer, Integer> to, String role)
 	{	
 		Set<Integer> set;
-		coord.change(x1, y1);
-		board.put(coord, Square.empty);	
+		board.put(from, Square.empty);	
 		
 		if (role == "white") {
 			set = whitePawns.keySet();
 			for(Integer key : set)
 			{
-				if(whitePawns.get(key).equals(coord))
+				if(whitePawns.get(key).equals(from))
 				{
-					whitePawns.put(key, new Pair<Integer,Integer>(x2,y2));
+					whitePawns.put(key, to);
 					break;
 				}				
 			}
-			coord.change(x2, y2);
-			if(board.get(coord).equals(Square.black))
+			if(board.get(to).equals(Square.black))
 			{
 				set = blackPawns.keySet();
 				Integer temp = -1;
 				for(Integer key : set)
 				{
-					if(blackPawns.get(key).equals(coord))
+					if(blackPawns.get(key).equals(to))
 					{
 						temp = key;
 					}
 				}
 				System.out.println("removed black pawn: " + blackPawns.remove(temp));
 			}
-			board.put(coord, Square.white);
+			board.put(to, Square.white);
 		} else {
 			set = blackPawns.keySet();
 			for(Integer key : set)
 			{
-				if(blackPawns.get(key).equals(coord))
+				if(blackPawns.get(key).equals(from))
 				{
-					blackPawns.put(key, new Pair<Integer, Integer>(x2, y2));
+					blackPawns.put(key, to);
 					break;
 				}				
 			}
-			coord.change(x2, y2);
-			if(board.get(coord).equals(Square.white))
+			if(board.get(to).equals(Square.white))
 			{
 				set = whitePawns.keySet();
 				Integer temp = -1;
 				for(Integer key : set)
 				{
-					if(whitePawns.get(key).equals(coord))
+					if(whitePawns.get(key).equals(to))
 					{
 						temp = key;
 					}
 				}
 				System.out.println("removed white pawn: " + whitePawns.remove(temp));
 			}
-			board.put(coord, Square.black);
+			board.put(to, Square.black);
 		}
 	}
 	
