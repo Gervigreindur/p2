@@ -28,6 +28,8 @@ public class State {
 		blackPawns = new HashMap<Integer, Pair<Integer, Integer>>();
 		board = new HashMap<Pair<Integer, Integer>, Square>();
 		setInitialBoard();
+		printBoard();
+		printPawns();
 	}
 
 	public void setInitialBoard()
@@ -64,7 +66,6 @@ public class State {
 
 	public ArrayList<Integer>legalActions(String lastRole)
 	{
-		//printPawns();
 		ArrayList<Integer> legal = new ArrayList<Integer>();
 		if(lastRole.equals("black"))
 		{
@@ -165,16 +166,18 @@ public class State {
 		Set<Integer> set;
 		coord.change(x1, y1);
 		board.put(coord, Square.empty);	
+		
 		if (role == "white") {
 			set = whitePawns.keySet();
 			for(Integer key : set)
 			{
 				if(whitePawns.get(key).equals(coord))
 				{
-					coord.change(x2, y2);
-					whitePawns.put(key, coord);
+					whitePawns.put(key, new Pair<Integer,Integer>(x2,y2));
+					break;
 				}				
 			}
+			coord.change(x2, y2);
 			if(board.get(coord).equals(Square.black))
 			{
 				set = blackPawns.keySet();
@@ -195,17 +198,17 @@ public class State {
 			{
 				if(blackPawns.get(key).equals(coord))
 				{
-					coord.change(x2, y2);
-					blackPawns.put(key, coord);
+					blackPawns.put(key, new Pair<Integer, Integer>(x2, y2));
+					break;
 				}				
 			}
+			coord.change(x2, y2);
 			if(board.get(coord).equals(Square.white))
 			{
 				set = whitePawns.keySet();
 				Integer temp = -1;
 				for(Integer key : set)
 				{
-					
 					if(whitePawns.get(key).equals(coord))
 					{
 						temp = key;
@@ -223,17 +226,20 @@ public class State {
 		System.out.println("black pawns:");
 		for(Integer x : set)
 		{
-			System.out.println("left: " + blackPawns.get(x).getLeft());
-			System.out.println("right: " + blackPawns.get(x).getRight());
+			System.out.print(" left: " + blackPawns.get(x).getLeft());
+			System.out.print(" ");
+			System.out.print(" right: " + blackPawns.get(x).getRight());
 		}
 		set = whitePawns.keySet();
+		System.out.println("");
 		System.out.println("white pawns:");
 		for(Integer x : set)
 		{
-			
-			System.out.println("left: " + whitePawns.get(x).getLeft());
-			System.out.println("right: " + whitePawns.get(x).getRight());
+			System.out.print(" left: " + whitePawns.get(x).getLeft());
+			System.out.print(" ");
+			System.out.print(" right: " + whitePawns.get(x).getRight());
 		}
+		System.out.println("");
 	}
 	
 	public void printBoard()

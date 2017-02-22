@@ -42,14 +42,15 @@ public class OurAgent implements Agent
     		// TODO: 1. update your internal world model according to the action that was just executed
     		environment.updateState(x1, y1, x2, y2, roleOfLastPlayer);
     		environment.printBoard();
+    		environment.printPawns();
+    		ArrayList<Integer> x = environment.legalActions(roleOfLastPlayer);
+			System.out.println("legal moves: " + x);
     	}
 		
     	// update turn (above this line the myTurn is still for the previous state)
 		myTurn = !myTurn;
 		if (myTurn) {
 			// TODO: 2. run alpha-beta search to determine the best move
-			ArrayList<Integer> x = environment.legalActions(roleOfLastPlayer);
-			System.out.println("legal moves: " + x);
 			// Here we just construct a random move (that will most likely not even be possible),
 			// this needs to be replaced with the actual best move.
 			int x1,y1,x2,y2;
