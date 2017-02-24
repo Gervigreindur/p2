@@ -24,7 +24,7 @@ public class OurAgent implements Agent
 		this.width = width;
 		this.height = height;
 		// TODO: add your own initialization code here
-		environment = new State(height, width, true);
+		environment = new State(height, width);
     }
 
 	// lastMove is null the first time nextAction gets called (in the initial state)
@@ -59,7 +59,7 @@ public class OurAgent implements Agent
 			ArrayList<Pair<Integer, Integer>> nextMove = abs.alphaBetaSearch(environment);
 			System.out.println("legal moves: " + nextMove);
 			
-			return "(move " + nextMove.get(0) + " " + nextMove.get(1) + " " + nextMove.get(2) + " " + nextMove.get(3) + ")";
+			return "(move " + nextMove.get(0).getLeft() + " " + nextMove.get(0).getRight() + " " + nextMove.get(1).getLeft() + " " + nextMove.get(1).getRight() + ")";
 		} else {
 			return "noop";
 		}

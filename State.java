@@ -1,18 +1,15 @@
 package p2;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 public class State {
 	
 	private int height;
 	private int width;
-	private Map<Integer, Pair<Integer, Integer>> whitePawns;
-	private Map<Integer, Pair<Integer, Integer>> blackPawns;
-	private Map<Pair<Integer, Integer>, Square> board;
+	private ArrayList<Pair<Integer, Integer>> whitePawns;
+	private ArrayList<Pair<Integer, Integer>> blackPawns;
 	private Pair<Integer, Integer> coord;
 	private boolean white;  	//white = true, black = false
 	
@@ -20,27 +17,29 @@ public class State {
 	public boolean isWhite() {
 		return white;
 	}
-
-	private enum Square
+	
+	public State(State barry)
 	{
-		white, black, empty
+		this.height = barry.height;
+		this.width = barry.width;
+		coord = barry.coord;
+		whitePawns = barry.whitePawns;
+		blackPawns = barry.blackPawns;
+		white = barry.white;
 	}
 	
-	State(int height, int width, boolean initial)
+	State(int height, int width)
 	{
 		this.height = height;
 		this.width = width;
 		coord = new Pair<Integer, Integer>(0, 0);
-		whitePawns = new HashMap<Integer, Pair<Integer, Integer>>();
-		blackPawns = new HashMap<Integer, Pair<Integer, Integer>>();
-		board = new HashMap<Pair<Integer, Integer>, Square>();
+		whitePawns = new ArrayList<Pair<Integer, Integer>>();
+		blackPawns = new ArrayList<Pair<Integer, Integer>>();
 		white = true;
-		if(initial)
-		{
-			setInitialBoard();
-			printBoard();
-			printPawns();
-		}
+		
+		setInitialBoard();
+		printBoard();
+		printPawns();
 		
 	}
 
@@ -52,17 +51,11 @@ public class State {
 			{
 				if(y <= 2)
 				{
-					board.put(new Pair<Integer, Integer>(x, y), Square.white);
-					whitePawns.put(whitePawns.size() , new Pair<Integer, Integer>(x, y));
+					whitePawns.add(new Pair<Integer, Integer>(x, y));
 				}
 				else if(y > (height - 2))
 				{
-					board.put(new Pair<Integer, Integer>(x, y), Square.black);
-					blackPawns.put(blackPawns.size() , new Pair<Integer, Integer>(x, y));
-				}
-				else
-				{
-					board.put(new Pair<Integer, Integer>(x, y), Square.empty);
+					blackPawns.add(new Pair<Integer, Integer>(x, y));
 				}
 			}
 		}
@@ -79,163 +72,117 @@ public class State {
 	public ArrayList<Integer>legalActions()
 	{
 		ArrayList<Integer> legal = new ArrayList<Integer>();
-		if(!white)
+		if(white)
 		{
-			Set<Integer> set = whitePawns.keySet();
-			for(Integer key : set)
+			for(int i = 0; i < whitePawns.size(); i++)
 			{
 				//todo: send all possible actions for white player
-				int x1 = (int) whitePawns.get(key).getLeft();
-				int y1 = (int) whitePawns.get(key).getRight();
-				if(y1+1 <= height)
+				int x1 = (int) whitePawns.get(i).getLeft();
+				int y1 = (int) whitePawns.get(i).getRight();
+				coord.change(x1, y1+1);
+				if(y1+1 <= height && !blackPawns.contains(coord) && !whitePawns.contains(coord))
 				{
-					coord.change(x1, y1+1);
-					if(board.get(coord).equals(Square.empty))
-					{
-						legal.add(x1);
-						legal.add(y1);
-						legal.add(x1);
-						legal.add(y1 + 1);
-					}
+					legal.add(x1);
+					legal.add(y1);
+					legal.add(x1);
+					legal.add(y1 + 1);					
 				}
-				if(y1+1 <= height && (x1 - 1) > 0)
+				coord.change(x1 - 1, y1+1);
+				if(y1+1 <= height && (x1 - 1) > 0 && blackPawns.contains(coord))
 				{
-					coord.change(x1 - 1, y1+1);
-					if(board.get(coord).equals(Square.black))
-					{
-						legal.add(x1);
-						legal.add(y1);
-						legal.add(x1 - 1);
-						legal.add(y1 + 1);
-					}
+					legal.add(x1);
+					legal.add(y1);
+					legal.add(x1 - 1);
+					legal.add(y1 + 1);
+					
 				}
-				if(y1+1 <= height && x1 + 1 <= width)
-				{
-					coord.change(x1 + 1, y1 + 1);
-					if(board.get(coord).equals(Square.black))
-					{
-						legal.add(x1);
-						legal.add(y1);
-						legal.add(x1 + 1);
-						legal.add(y1 + 1);
-					}
+				coord.change(x1 + 1, y1 + 1);
+				if(y1+1 <= height && x1 + 1 <= width && blackPawns.contains(coord))
+				{					
+					legal.add(x1);
+					legal.add(y1);
+					legal.add(x1 + 1);
+					legal.add(y1 + 1);
 				}				
 			}
 		}
-		else if(white)
+		else
 		{
-			Set<Integer> set = blackPawns.keySet();
-			for(Integer key : set)
+			for(int i = 0; i < whitePawns.size(); i++)
 			{
-				//todo: send all possible actions for white player
-				int x1 = (int) blackPawns.get(key).getLeft();
-				int y1 = (int) blackPawns.get(key).getRight();
-				Pair<Integer, Integer> coord = new Pair<Integer,Integer>(x1,y1);
-				if(y1 > 0)
+				//todo: send all possible actions for black player
+				int x1 = (int) blackPawns.get(i).getLeft();
+				int y1 = (int) blackPawns.get(i).getRight();
+				coord.change(x1, y1 - 1);
+				if(y1 - 1 > 0 && !blackPawns.contains(coord) && !whitePawns.contains(coord))
 				{
-					coord.change(x1, y1 - 1);
-					if(board.get(coord).equals(Square.empty))
-					{
-						legal.add(x1);
-						legal.add(y1);
-						legal.add(x1);
-						legal.add(y1 - 1);
-					}
+					legal.add(x1);
+					legal.add(y1);
+					legal.add(x1);
+					legal.add(y1 - 1);
+					
 				}
-				if(y1 - 1 > 0 && (x1 - 1) > 0)
+				coord.change(x1 - 1, y1 - 1);
+				if(y1 - 1 > 0 && (x1 - 1) > 0 && whitePawns.contains(coord))
 				{
-					coord.change(x1 - 1, y1 - 1);
-					if(board.get(coord).equals(Square.white))
-					{
-						legal.add(x1);
-						legal.add(y1);
-						legal.add(x1 - 1);
-						legal.add(y1 - 1);
-					}
+					legal.add(x1);
+					legal.add(y1);
+					legal.add(x1 - 1);
+					legal.add(y1 - 1);
+				
 				}
-				if(y1 - 1 > 0 && x1 + 1 <= width)
+				coord.change(x1 + 1, y1 - 1);
+				if(y1 - 1 > 0 && x1 + 1 <= width && whitePawns.contains(coord))
 				{
-					coord.change(x1 + 1, y1 - 1);
-					if(board.get(coord).equals(Square.white))
-					{
-						legal.add(x1);
-						legal.add(y1);
-						legal.add(x1 + 1);
-						legal.add(y1 - 1);
-					}
+					legal.add(x1);
+					legal.add(y1);
+					legal.add(x1 + 1);
+					legal.add(y1 - 1);
 				}				
 			}
 		}
-
+		white = !white;
 		return legal;
 	}
 
 	public void updateState(Pair<Integer, Integer> from,Pair<Integer, Integer> to)
 	{	
-		Set<Integer> set;
-		board.put(from, Square.empty);	
-		white = !white;
-		if (white) {
-			set = whitePawns.keySet();
-			for(Integer key : set)
+		if (white) 
+		{
+			int temp = whitePawns.indexOf(from);
+			if(temp >= 0)
 			{
-				if(whitePawns.get(key).equals(from))
+				whitePawns.remove(temp);
+				whitePawns.add(to);
+				if(blackPawns.contains(to))
 				{
-					whitePawns.put(key, to);
-					break;
-				}				
-			}
-			if(board.get(to).equals(Square.black))
-			{
-				set = blackPawns.keySet();
-				Integer temp = -1;
-				for(Integer key : set)
-				{
-					if(blackPawns.get(key).equals(to))
-					{
-						temp = key;
-					}
+					blackPawns.remove(blackPawns.indexOf(to));
 				}
-				System.out.println("removed black pawn: " + blackPawns.remove(temp));
 			}
-			board.put(to, Square.white);
-		} else {
-			set = blackPawns.keySet();
-			for(Integer key : set)
+			
+		} 
+		else 
+		{
+			int temp = whitePawns.indexOf(from);
+			if(temp >= 0)
 			{
-				if(blackPawns.get(key).equals(from))
+				blackPawns.remove(temp);
+				blackPawns.add(to);
+				if(whitePawns.contains(to))
 				{
-					blackPawns.put(key, to);
-					break;
-				}				
-			}
-			if(board.get(to).equals(Square.white))
-			{
-				set = whitePawns.keySet();
-				Integer temp = -1;
-				for(Integer key : set)
-				{
-					if(whitePawns.get(key).equals(to))
-					{
-						temp = key;
-					}
+					whitePawns.remove(whitePawns.indexOf(to));
 				}
-				System.out.println("removed white pawn: " + whitePawns.remove(temp));
 			}
-			board.put(to, Square.black);
 		}
 	}
-	
+	/*
 	public State result(Pair<Integer, Integer> from, Pair<Integer, Integer>to)
 	{
-		State nextState = new State(height, width, false);
-		nextState.setBlackPawns(blackPawns);
-		nextState.setWhitePawns(whitePawns);
-		nextState.setBoard(board);
+		State nextState = new State(state);
 		nextState.updateState(from, to);
 		return nextState;
 	}
-	
+	*/
 	public boolean terminalTest()
 	{
 		if(legalActions().size() == 0 || goalTest())
@@ -250,10 +197,10 @@ public class State {
 	{
 		if(white)
 		{
-			Set<Integer> set = whitePawns.keySet();
-			for(Integer x : set)
+			
+			for(int i = 0; i < whitePawns.size(); i++)
 			{
-				if(whitePawns.get(x).getRight().equals(height))
+				if(whitePawns.get(i).getRight().equals(height))
 				{
 					return true;
 				}
@@ -261,16 +208,14 @@ public class State {
 		}
 		else
 		{
-			Set<Integer> set = blackPawns.keySet();
-			for(Integer x : set)
+			for(int i = 0; i < blackPawns.size(); i++)
 			{
-				if(blackPawns.get(x).getRight().equals(0))
+				if(blackPawns.get(i).getRight().equals(1))
 				{
 					return true;
 				}
 			}
-		}
-			
+		}	
 		return false;
 	}
 	
@@ -280,7 +225,7 @@ public class State {
 		{
 			return 100;
 		}
-		else if(legalActions().size() == 0)
+		else if(this.legalActions().size() == 0)
 		{
 			return 50;
 		}
@@ -290,22 +235,21 @@ public class State {
 
 	public void printPawns()
 	{
-		Set<Integer> set = blackPawns.keySet();
+		
 		System.out.println("black pawns:");
-		for(Integer x : set)
+		for(int i = 0; i < blackPawns.size(); i++)
 		{
-			System.out.print(" left: " + blackPawns.get(x).getLeft());
+			System.out.print(" left: " + blackPawns.get(i).getLeft());
 			System.out.print(" ");
-			System.out.print(" right: " + blackPawns.get(x).getRight());
+			System.out.print(" right: " + blackPawns.get(i).getRight());
 		}
-		set = whitePawns.keySet();
 		System.out.println("");
 		System.out.println("white pawns:");
-		for(Integer x : set)
+		for(int i = 0 ; i < whitePawns.size(); i++)
 		{
-			System.out.print(" left: " + whitePawns.get(x).getLeft());
+			System.out.print(" left: " + whitePawns.get(i).getLeft());
 			System.out.print(" ");
-			System.out.print(" right: " + whitePawns.get(x).getRight());
+			System.out.print(" right: " + whitePawns.get(i).getRight());
 		}
 		System.out.println("");
 	}
@@ -317,59 +261,52 @@ public class State {
 			for(int j = 1; j <= width; j++)
 			{
 				coord.change(j, i);
-				System.out.print(board.get(coord) + " | ");
+				if(blackPawns.contains(coord))
+				{
+					System.out.print("BLACK | ");
+				}
+				else if(whitePawns.contains(coord))
+				{
+					System.out.print("WHITE | ");
+				}
+				else
+				{
+					System.out.print("      | ");
+				}
 			}
 			System.out.println("");
 			System.out.println("--------------------");
 		}
 	}
 
+	
 	/**
 	 * @return the whitePawns
 	 */
-	public Map<Integer, Pair<Integer, Integer>> getWhitePawns() {
+	public ArrayList<Pair<Integer, Integer>> getWhitePawns() {
 		return whitePawns;
 	}
 
 	/**
 	 * @param whitePawns the whitePawns to set
 	 */
-	public void setWhitePawns(Map<Integer, Pair<Integer, Integer>> whitePawns) {
-		Map<Integer, Pair<Integer, Integer>> temp = new HashMap<Integer, Pair<Integer, Integer>>();
-		temp = whitePawns;
-		this.whitePawns = temp;
+	public void setWhitePawns(ArrayList<Pair<Integer, Integer>> whitePawns) {
+		this.whitePawns = whitePawns;
 	}
 
 	/**
 	 * @return the blackPawns
 	 */
-	public Map<Integer, Pair<Integer, Integer>> getBlackPawns() {
+	public ArrayList<Pair<Integer, Integer>> getBlackPawns() {
 		return blackPawns;
 	}
 
 	/**
 	 * @param blackPawns the blackPawns to set
 	 */
-	public void setBlackPawns(Map<Integer, Pair<Integer, Integer>> blackPawns) {
-		Map<Integer, Pair<Integer, Integer>> temp = new HashMap<Integer, Pair<Integer, Integer>>();
-		this.blackPawns = temp;
-				
+	public void setBlackPawns(ArrayList<Pair<Integer, Integer>> blackPawns) {
+		this.blackPawns = blackPawns;
 	}
 
-	/**
-	 * @return the board
-	 */
-	public Map<Pair<Integer, Integer>, Square> getBoard() {
-		return board;
-	}
-
-	/**
-	 * @param board the board to set
-	 */
-	public void setBoard(Map<Pair<Integer, Integer>, Square> board) {
-		Map<Pair<Integer, Integer>, Square> temp = new HashMap<Pair<Integer, Integer>, Square>();
-		
-		this.board = board;
-	}
 
 }
