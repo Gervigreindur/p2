@@ -222,6 +222,12 @@ public class State {
 		}
 	}
 	
+	public State result(Pair<Integer, Integer> from, Pair<Integer, Integer>to)
+	{
+		State nextState = this;
+		nextState.updateState(from, to);
+		return nextState;
+	}
 	public boolean terminalTest()
 	{
 		if(legalActions().size() == 0 || legalActions().size() == 0 || goalTest())
