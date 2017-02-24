@@ -224,7 +224,7 @@ public class State {
 	
 	public boolean terminalTest()
 	{
-		if(legalActions("white").size() == 0 || legalActions("black").size() == 0 || goalTest())
+		if(legalActions().size() == 0 || legalActions().size() == 0 || goalTest())
 		{
 			return true;
 		}
