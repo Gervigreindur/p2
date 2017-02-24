@@ -13,6 +13,7 @@ public class OurAgent implements Agent
 	private boolean myTurn; // whether it is this agent's turn or not
 	private int width, height; // dimensions of the board
 	private State environment;
+
 	/*
 		init(String role, int playclock) is called once before you have to select the first action. Use it to initialize the agent. role is either "white" or "black" and playclock is the number of seconds after which nextAction must return.
 	*/
@@ -23,7 +24,7 @@ public class OurAgent implements Agent
 		this.width = width;
 		this.height = height;
 		// TODO: add your own initialization code here
-		environment = new State(height, width);
+		environment = new State(height, width, true);
     }
 
 	// lastMove is null the first time nextAction gets called (in the initial state)
@@ -53,62 +54,16 @@ public class OurAgent implements Agent
 			// TODO: 2. run alpha-beta search to determine the best move
 			// Here we just construct a random move (that will most likely not even be possible),
 			// this needs to be replaced with the actual best move.
+			AlphaBetaSearch abs = new AlphaBetaSearch();
 			
-			Pair<Integer, Integer> nextMove = alphaBetaSearch(environment);
-			System.out.println("legal moves: " + x);
-			int x1,y1,x2,y2;
+			ArrayList<Pair<Integer, Integer>> nextMove = abs.alphaBetaSearch(environment);
+			System.out.println("legal moves: " + nextMove);
 			
-			x1 = random.nextInt(width)+1;
-			x2 = x1 + random.nextInt(3)-1;
-			if (role.equals("white")) {
-				y1 = random.nextInt(height-1);
-				y2 = y1 + 1;
-			} else {
-				y1 = random.nextInt(height-1)+2;
-				y2 = y1 - 1;
-			}
-			if(environment.terminalTest())
-			{
-				System.out.println("Winner");
-				return " ";
-			}
-			else
-			{
-				return "(move " + x1 + " " + y1 + " " + x2 + " " + y2 + ")";
-			}	
+			return "(move " + nextMove.get(0) + " " + nextMove.get(1) + " " + nextMove.get(2) + " " + nextMove.get(3) + ")";
 		} else {
 			return "noop";
 		}
-	}
-
-	private ArrayList<Pair<Integer, Integer>> alphaBetaSearch(State state) {
-		ArrayList<Integer> legalActions = state.legalActions();
-		int bestV = -1;
-		Pair<Integer, Integer> bestActionFrom = new Pair<Integer, Integer>(-1, -1);
-		Pair<Integer, Integer> bestActionTo = new Pair<Integer, Integer>(-1, -1);
-		for(int i = 0; i < legalActions.size(); i += 4)
-		{
-			Pair<Integer, Integer> checkActionFrom = new Pair<Integer, Integer>(legalActions.get(i), legalActions.get(i + 1));
-			Pair<Integer, Integer> checkActionTo = new Pair<Integer, Integer>(legalActions.get(i + 2 ), legalActions.get(i + 3));
-			int v = maxValue(state.result(checkActionFrom, checkActionTo), 0, 100);
-			if(v > bestV)
-			{
-				bestV = v;
-				bestActionFrom = new Pair<Integer, Integer>(legalActions.get(i), legalActions.get(i + 1));
-				bestActionTo = new Pair<Integer, Integer>(legalActions.get(i + 2), legalActions.get(i + 3));
-			}
-		}
 		
-		ArrayList<Pair<Integer, Integer>> bestResult = new ArrayList<Pair<Integer, Integer>>();
-		bestResult.add(bestActionFrom);
-		bestResult.add(bestActionTo);
-		
-		return bestResult;
-	}
-
-	private int maxValue(State state, int i, int j) {
-		
-		return 0;
 	}
 
 	// is called when the game is over or the match is aborted

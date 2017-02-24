@@ -26,7 +26,7 @@ public class State {
 		white, black, empty
 	}
 	
-	State(int height, int width)
+	State(int height, int width, boolean initial)
 	{
 		this.height = height;
 		this.width = width;
@@ -35,9 +35,13 @@ public class State {
 		blackPawns = new HashMap<Integer, Pair<Integer, Integer>>();
 		board = new HashMap<Pair<Integer, Integer>, Square>();
 		white = true;
-		setInitialBoard();
-		printBoard();
-		printPawns();
+		if(initial)
+		{
+			setInitialBoard();
+			printBoard();
+			printPawns();
+		}
+		
 	}
 
 	public void setInitialBoard()
@@ -224,13 +228,17 @@ public class State {
 	
 	public State result(Pair<Integer, Integer> from, Pair<Integer, Integer>to)
 	{
-		State nextState = this;
+		State nextState = new State(height, width, false);
+		nextState.setBlackPawns(blackPawns);
+		nextState.setWhitePawns(whitePawns);
+		nextState.setBoard(board);
 		nextState.updateState(from, to);
 		return nextState;
 	}
+	
 	public boolean terminalTest()
 	{
-		if(legalActions().size() == 0 || legalActions().size() == 0 || goalTest())
+		if(legalActions().size() == 0 || goalTest())
 		{
 			return true;
 		}
@@ -245,7 +253,7 @@ public class State {
 			Set<Integer> set = whitePawns.keySet();
 			for(Integer x : set)
 			{
-				if(whitePawns.get(x).getRight().equals(0))
+				if(whitePawns.get(x).getRight().equals(height))
 				{
 					return true;
 				}
@@ -256,7 +264,7 @@ public class State {
 			Set<Integer> set = blackPawns.keySet();
 			for(Integer x : set)
 			{
-				if(blackPawns.get(x).getRight().equals(height))
+				if(blackPawns.get(x).getRight().equals(0))
 				{
 					return true;
 				}
@@ -264,6 +272,20 @@ public class State {
 		}
 			
 		return false;
+	}
+	
+	public Integer utility()
+	{
+		if(goalTest())
+		{
+			return 100;
+		}
+		else if(legalActions().size() == 0)
+		{
+			return 50;
+		}
+		
+		return 0;
 	}
 
 	public void printPawns()
@@ -301,4 +323,53 @@ public class State {
 			System.out.println("--------------------");
 		}
 	}
+
+	/**
+	 * @return the whitePawns
+	 */
+	public Map<Integer, Pair<Integer, Integer>> getWhitePawns() {
+		return whitePawns;
+	}
+
+	/**
+	 * @param whitePawns the whitePawns to set
+	 */
+	public void setWhitePawns(Map<Integer, Pair<Integer, Integer>> whitePawns) {
+		Map<Integer, Pair<Integer, Integer>> temp = new HashMap<Integer, Pair<Integer, Integer>>();
+		temp = whitePawns;
+		this.whitePawns = temp;
+	}
+
+	/**
+	 * @return the blackPawns
+	 */
+	public Map<Integer, Pair<Integer, Integer>> getBlackPawns() {
+		return blackPawns;
+	}
+
+	/**
+	 * @param blackPawns the blackPawns to set
+	 */
+	public void setBlackPawns(Map<Integer, Pair<Integer, Integer>> blackPawns) {
+		Map<Integer, Pair<Integer, Integer>> temp = new HashMap<Integer, Pair<Integer, Integer>>();
+		this.blackPawns = temp;
+				
+	}
+
+	/**
+	 * @return the board
+	 */
+	public Map<Pair<Integer, Integer>, Square> getBoard() {
+		return board;
+	}
+
+	/**
+	 * @param board the board to set
+	 */
+	public void setBoard(Map<Pair<Integer, Integer>, Square> board) {
+		Map<Pair<Integer, Integer>, Square> temp = new HashMap<Pair<Integer, Integer>, Square>();
+		
+		this.board = board;
+	}
+
 }
