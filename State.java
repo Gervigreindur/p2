@@ -108,7 +108,7 @@ public class State {
 		}
 		else
 		{
-			for(int i = 0; i < whitePawns.size(); i++)
+			for(int i = 0; i < blackPawns.size(); i++)
 			{
 				//todo: send all possible actions for black player
 				int x1 = (int) blackPawns.get(i).getLeft();
