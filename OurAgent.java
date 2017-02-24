@@ -57,7 +57,7 @@ public class OurAgent implements Agent
 			AlphaBetaSearch abs = new AlphaBetaSearch();
 			
 			ArrayList<Pair<Integer, Integer>> nextMove = abs.alphaBetaSearch(environment);
-			System.out.println("legal moves: " + nextMove);
+			System.out.println("legal moves: "  + nextMove.get(0).getLeft() + " " + nextMove.get(0).getRight() + " " + nextMove.get(1).getLeft() + " " + nextMove.get(1).getRight());
 			
 			return "(move " + nextMove.get(0).getLeft() + " " + nextMove.get(0).getRight() + " " + nextMove.get(1).getLeft() + " " + nextMove.get(1).getRight() + ")";
 		} else {

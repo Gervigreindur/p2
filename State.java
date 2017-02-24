@@ -8,8 +8,8 @@ public class State {
 	
 	private int height;
 	private int width;
-	private ArrayList<Pair<Integer, Integer>> whitePawns;
-	private ArrayList<Pair<Integer, Integer>> blackPawns;
+	public ArrayList<Pair<Integer, Integer>> whitePawns;
+	public ArrayList<Pair<Integer, Integer>> blackPawns;
 	private Pair<Integer, Integer> coord;
 	private boolean white;  	//white = true, black = false
 	
@@ -22,9 +22,18 @@ public class State {
 	{
 		this.height = barry.height;
 		this.width = barry.width;
-		coord = barry.coord;
-		whitePawns = barry.whitePawns;
-		blackPawns = barry.blackPawns;
+		coord = new Pair<Integer, Integer>(barry.coord.getLeft(), barry.coord.getRight());
+		whitePawns = new ArrayList<Pair<Integer, Integer>>();
+		blackPawns = new ArrayList<Pair<Integer, Integer>>();
+		for(Pair<Integer, Integer> white : barry.whitePawns)
+		{
+			//System.out.print("white: " + white.getLeft() + " " +  white.getRight());
+			whitePawns.add(new Pair<Integer, Integer>(white.getLeft(), white.getRight()));
+		}
+		for(Pair<Integer, Integer> black : barry.blackPawns)
+		{
+			blackPawns.add(new Pair<Integer, Integer>(black.getLeft(), black.getRight()));
+		}
 		white = barry.white;
 	}
 	
@@ -72,13 +81,10 @@ public class State {
 	public ArrayList<Integer>legalActions()
 	{
 		ArrayList<Integer> legal = new ArrayList<Integer>();
-		if(blackPawns.size() == 0 || whitePawns.size() == 0)
-		{
-			return legal;
-		}
 		
 		if(white)
 		{
+			
 			for(int i = 0; i < whitePawns.size(); i++)
 			{
 				//todo: send all possible actions for white player
@@ -113,6 +119,7 @@ public class State {
 		}
 		else
 		{
+			
 			for(int i = 0; i < blackPawns.size(); i++)
 			{
 				//todo: send all possible actions for black player
@@ -152,7 +159,7 @@ public class State {
 
 	public void updateState(Pair<Integer, Integer> from,Pair<Integer, Integer> to)
 	{	
-		System.out.println("UpdateState white is: " + white);
+		//System.out.println("UpdateState white is: " + white);
 		if (white) 
 		{
 			int temp = whitePawns.indexOf(from);
@@ -162,7 +169,7 @@ public class State {
 				whitePawns.add(to);
 				if(blackPawns.contains(to))
 				{
-					System.out.println("removed BLACK Pawn at: " + blackPawns.indexOf(to) + " " + blackPawns.get(blackPawns.indexOf(to)).getLeft() + " " + blackPawns.get(blackPawns.indexOf(to)).getRight());
+					//System.out.println("removed BLACK Pawn at: " + blackPawns.indexOf(to) + " " + blackPawns.get(blackPawns.indexOf(to)).getLeft() + " " + blackPawns.get(blackPawns.indexOf(to)).getRight());
 					blackPawns.remove(blackPawns.indexOf(to));
 				}
 			}
@@ -177,7 +184,7 @@ public class State {
 				blackPawns.add(to);
 				if(whitePawns.contains(to))
 				{
-					System.out.println("removed White Pawn at: " + whitePawns.indexOf(to) + " " + whitePawns.get(whitePawns.indexOf(to)).getLeft() + " " + whitePawns.get(whitePawns.indexOf(to)).getRight());
+					//System.out.println("removed White Pawn at: " + whitePawns.indexOf(to) + " " + whitePawns.get(whitePawns.indexOf(to)).getLeft() + " " + whitePawns.get(whitePawns.indexOf(to)).getRight());
 					whitePawns.remove(whitePawns.indexOf(to));
 				}
 			}
