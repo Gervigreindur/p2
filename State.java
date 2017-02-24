@@ -14,6 +14,7 @@ public class State {
 	private Map<Integer, Pair<Integer, Integer>> blackPawns;
 	private Map<Pair<Integer, Integer>, Square> board;
 	private Pair<Integer, Integer> coord;
+	private boolean white;  	//white = true, black = false
 	private enum Square
 	{
 		white, black, empty
@@ -27,6 +28,7 @@ public class State {
 		whitePawns = new HashMap<Integer, Pair<Integer, Integer>>();
 		blackPawns = new HashMap<Integer, Pair<Integer, Integer>>();
 		board = new HashMap<Pair<Integer, Integer>, Square>();
+		white = true;
 		setInitialBoard();
 		printBoard();
 		printPawns();
@@ -217,6 +219,44 @@ public class State {
 		}
 	}
 	
+	public boolean terminalTest()
+	{
+		if(legalActions("white").size() == 0 || legalActions("black").size() == 0 || goalTest())
+		{
+			return true;
+		}
+		
+		return false;
+	}
+	
+	public boolean goalTest() 
+	{
+		if(white)
+		{
+			Set<Integer> set = whitePawns.keySet();
+			for(Integer x : set)
+			{
+				if(whitePawns.get(x).getRight().equals(0))
+				{
+					return true;
+				}
+			}
+		}
+		else
+		{
+			Set<Integer> set = blackPawns.keySet();
+			for(Integer x : set)
+			{
+				if(blackPawns.get(x).getRight().equals(height))
+				{
+					return true;
+				}
+			}
+		}
+			
+		return false;
+	}
+
 	public void printPawns()
 	{
 		Set<Integer> set = blackPawns.keySet();

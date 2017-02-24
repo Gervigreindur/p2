@@ -44,8 +44,7 @@ public class OurAgent implements Agent
     		environment.updateState(new Pair<Integer, Integer>(x1, y1), new Pair<Integer, Integer>(x2, y2), roleOfLastPlayer);
     		environment.printBoard();
     		environment.printPawns();
-    		ArrayList<Integer> x = environment.legalActions(roleOfLastPlayer);
-			System.out.println("legal moves: " + x);
+    		
     	}
 		
     	// update turn (above this line the myTurn is still for the previous state)
@@ -54,6 +53,8 @@ public class OurAgent implements Agent
 			// TODO: 2. run alpha-beta search to determine the best move
 			// Here we just construct a random move (that will most likely not even be possible),
 			// this needs to be replaced with the actual best move.
+			ArrayList<Integer> x = environment.legalActions(roleOfLastPlayer);
+			System.out.println("legal moves: " + x);
 			int x1,y1,x2,y2;
 			
 			x1 = random.nextInt(width)+1;
@@ -65,7 +66,15 @@ public class OurAgent implements Agent
 				y1 = random.nextInt(height-1)+2;
 				y2 = y1 - 1;
 			}
-			return "(move " + x1 + " " + y1 + " " + x2 + " " + y2 + ")";
+			if(environment.terminalTest())
+			{
+				System.out.println("Winner");
+				return " ";
+			}
+			else
+			{
+				return "(move " + x1 + " " + y1 + " " + x2 + " " + y2 + ")";
+			}	
 		} else {
 			return "noop";
 		}
