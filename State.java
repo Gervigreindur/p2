@@ -15,6 +15,12 @@ public class State {
 	private Map<Pair<Integer, Integer>, Square> board;
 	private Pair<Integer, Integer> coord;
 	private boolean white;  	//white = true, black = false
+	
+
+	public boolean isWhite() {
+		return white;
+	}
+
 	private enum Square
 	{
 		white, black, empty
@@ -66,10 +72,10 @@ public class State {
 		return whitePawns.size();
 	}
 
-	public ArrayList<Integer>legalActions(String lastRole)
+	public ArrayList<Integer>legalActions()
 	{
 		ArrayList<Integer> legal = new ArrayList<Integer>();
-		if(lastRole.equals("black"))
+		if(!white)
 		{
 			Set<Integer> set = whitePawns.keySet();
 			for(Integer key : set)
@@ -112,7 +118,7 @@ public class State {
 				}				
 			}
 		}
-		else if(lastRole.equals("white"))
+		else if(white)
 		{
 			Set<Integer> set = blackPawns.keySet();
 			for(Integer key : set)
@@ -156,19 +162,16 @@ public class State {
 				}				
 			}
 		}
-		else
-		{
-			System.out.println("role not accepted in legal Actions function!");
-		}
+
 		return legal;
 	}
 
-	public void updateState(Pair<Integer, Integer> from,Pair<Integer, Integer> to, String role)
+	public void updateState(Pair<Integer, Integer> from,Pair<Integer, Integer> to)
 	{	
 		Set<Integer> set;
 		board.put(from, Square.empty);	
-		
-		if (role == "white") {
+		white = !white;
+		if (white) {
 			set = whitePawns.keySet();
 			for(Integer key : set)
 			{
