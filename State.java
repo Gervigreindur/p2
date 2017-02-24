@@ -36,7 +36,7 @@ public class State {
 		whitePawns = new ArrayList<Pair<Integer, Integer>>();
 		blackPawns = new ArrayList<Pair<Integer, Integer>>();
 		white = true;
-		
+		System.out.println("Initial!!");
 		setInitialBoard();
 		printBoard();
 		printPawns();
@@ -141,12 +141,13 @@ public class State {
 				}				
 			}
 		}
-		white = !white;
+		
 		return legal;
 	}
 
 	public void updateState(Pair<Integer, Integer> from,Pair<Integer, Integer> to)
 	{	
+		System.out.println("UpdateState white is: " + white);
 		if (white) 
 		{
 			int temp = whitePawns.indexOf(from);
@@ -163,7 +164,7 @@ public class State {
 		} 
 		else 
 		{
-			int temp = whitePawns.indexOf(from);
+			int temp = blackPawns.indexOf(from);
 			if(temp >= 0)
 			{
 				blackPawns.remove(temp);
@@ -174,6 +175,7 @@ public class State {
 				}
 			}
 		}
+		white = !white;
 	}
 	/*
 	public State result(Pair<Integer, Integer> from, Pair<Integer, Integer>to)

@@ -23,22 +23,24 @@ public class AlphaBetaSearch {
 	}
 
 	private int maxValue(State state, int alpha, int beta) {
-		
-		if(state.terminalTest()) 
+		State temp = new State(state);
+		if(temp.terminalTest()) 
 		{
-			return state.utility();
+			return temp.utility();
 		}
 		
-		ArrayList<Integer> legalActions = state.legalActions();
+		ArrayList<Integer> legalActions = temp.legalActions();
 		int v = 0;
 		for(int i = 0; i < legalActions.size(); i += 4)
 		{
 			Pair<Integer, Integer> checkActionFrom = new Pair<Integer, Integer>(legalActions.get(i), legalActions.get(i + 1));
 			Pair<Integer, Integer> checkActionTo = new Pair<Integer, Integer>(legalActions.get(i + 2 ), legalActions.get(i + 3));
-			System.out.println("before min called: is white? " + state.isWhite() );
+			System.out.println("before min called: is white? " + temp.isWhite() );
 			System.out.println("from: " + checkActionFrom.getLeft() + " " + checkActionFrom.getRight());
 			System.out.println("to: " + checkActionTo.getLeft() + " " + checkActionTo.getRight());
-			State temp = new State(state);
+			System.out.println(legalActions);
+			temp.printBoard();
+			temp.printPawns();
 			temp.updateState(checkActionFrom, checkActionTo);
 			v = Math.max(v, minValue(temp, alpha, beta));
 			
@@ -54,21 +56,25 @@ public class AlphaBetaSearch {
 	}
 
 	private int minValue(State state, int alpha, int beta) {
-		if(state.terminalTest()) 
+		
+		State temp = new State(state);
+		if(temp.terminalTest()) 
 		{
-			return state.utility();
+			return temp.utility();
 		}
 		
-		ArrayList<Integer> legalActions = state.legalActions();
+		ArrayList<Integer> legalActions = temp.legalActions();
 		int v = 100;
 		for(int i = 0; i < legalActions.size(); i += 4)
 		{
 			Pair<Integer, Integer> checkActionFrom = new Pair<Integer, Integer>(legalActions.get(i), legalActions.get(i + 1));
 			Pair<Integer, Integer> checkActionTo = new Pair<Integer, Integer>(legalActions.get(i + 2 ), legalActions.get(i + 3));
-			System.out.println("before max called: is white? " + state.isWhite() );
+			System.out.println("before max called: is white? " + temp.isWhite() );
 			System.out.println("from: " + checkActionFrom.getLeft() + " " + checkActionFrom.getRight());
 			System.out.println("to: " + checkActionTo.getLeft() + " " + checkActionTo.getRight());
-			State temp = new State(state);
+			System.out.println(legalActions);
+			temp.printBoard();
+			temp.printPawns();
 			temp.updateState(checkActionFrom, checkActionTo);
 			v = Math.min(v, maxValue(temp, alpha, beta));
 			
