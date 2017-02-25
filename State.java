@@ -13,7 +13,7 @@ public class State {
 	private List<Pair<Integer, Integer>> whitePawns;
 	private List<Pair<Integer, Integer>> blackPawns;
 	private Pair<Integer, Integer> coord;
-	private boolean white;  	//white = true, black = false
+	public boolean white;  	//white = true, black = false
 	
 
 	public boolean isWhite() {
@@ -232,6 +232,11 @@ public class State {
 			}
 		}	
 		return false;
+	}
+	
+	public Integer eval()
+	{
+		return 50 - (height - whitePawns.get(0).getRight()) + blackPawns.get(0).getRight() - 1;	
 	}
 	
 	public Integer utility()

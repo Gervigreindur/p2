@@ -16,7 +16,7 @@ public class AlphaBetaSearch {
 	}
 	
 	public ArrayList<Pair<Integer, Integer>> alphaBetaSearch(State state) {					
-		
+		System.out.println("state is white ? " + state.isWhite());
 		maxValue(state, 0, 100, 0);
 		ArrayList<Pair<Integer, Integer>> bestResult = new ArrayList<Pair<Integer, Integer>>();
 		bestResult.add(bestActionFrom);
@@ -26,15 +26,20 @@ public class AlphaBetaSearch {
 
 	private int maxValue(State state, int alpha, int beta, int depth) {
 		State temp = new State(state);
-		
-		
-		if(temp.terminalTest() || depth == cutoff) 
+			
+		if(temp.terminalTest()) 
 		{
 			//System.out.println("max depth: " + depth);
 			return temp.utility();
 		}
 		
+		if(depth == cutoff)
+		{
+			return temp.eval();
+		}
+		
 		ArrayList<Integer> legalActions = temp.legalActions();
+		//System.out.println("max legalActions: " + legalActions);
 		int v = 0;
 		for(int i = 0; i < legalActions.size(); i += 4)
 		{
@@ -47,10 +52,11 @@ public class AlphaBetaSearch {
 			//temp.printBoard();
 			//temp.printPawns();
 			temp.updateState(checkActionFrom, checkActionTo);
-			v = Math.max(v, minValue(temp, alpha, beta, depth++));
-			
-			if(v >= beta)
+			v = Math.max(v, minValue(temp, alpha, beta, depth+1));
+
+			if(v >= beta )
 			{
+				//System.out.println("best action found!" + legalActions.get(i) + " " + legalActions.get(i + 1) + " " + legalActions.get(i + 2) + legalActions.get(i + 3));
 				bestActionFrom = new Pair<Integer, Integer>(legalActions.get(i), legalActions.get(i + 1));
 				bestActionTo = new Pair<Integer, Integer>(legalActions.get(i + 2), legalActions.get(i + 3));
 				return v;
@@ -64,13 +70,20 @@ public class AlphaBetaSearch {
 		
 		State temp = new State(state);
 		
-		if(temp.terminalTest() || depth == cutoff) 
+		if(temp.terminalTest() ) 
 		{
 			//System.out.println("min depth: " + depth);
-			return temp.utility();
+			
+			return temp.utility(); 
+		}
+		
+		if(depth == cutoff)
+		{
+			return temp.eval();
 		}
 		
 		ArrayList<Integer> legalActions = temp.legalActions();
+		//System.out.println("min legalActions: " + legalActions);
 		int v = 100;
 		for(int i = 0; i < legalActions.size(); i += 4)
 		{
@@ -83,7 +96,7 @@ public class AlphaBetaSearch {
 			//temp.printBoard();
 			//temp.printPawns();
 			temp.updateState(checkActionFrom, checkActionTo);
-			v = Math.min(v, maxValue(temp, alpha, beta, depth++));
+			v = Math.min(v, maxValue(temp, alpha, beta, depth+1));
 			
 			if(v <= alpha)
 			{	
