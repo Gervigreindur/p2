@@ -7,16 +7,28 @@ public class AlphaBetaSearch {
 	private Pair<Integer, Integer> bestActionFrom;
 	private Pair<Integer, Integer> bestActionTo;
 	private int cutoff;
+	private String role;
+	private String enemy;
 	
-	AlphaBetaSearch(int cutoff)
+	AlphaBetaSearch(int cutoff, String role)
 	{
 		this.cutoff = cutoff;
+		this.role = role;
+		if(role.equals("white"))
+		{
+			enemy = "black";
+		}
+		else
+		{
+			enemy = "white";
+		}
+		
 		bestActionFrom = new Pair<Integer, Integer>(-1, -1);
 		bestActionTo = new Pair<Integer, Integer>(-1, -1);
 	}
 	
 	public ArrayList<Pair<Integer, Integer>> alphaBetaSearch(State state) {					
-		System.out.println("state is white ? " + state.isWhite());
+		
 		maxValue(state, 0, 100, 0);
 		ArrayList<Pair<Integer, Integer>> bestResult = new ArrayList<Pair<Integer, Integer>>();
 		bestResult.add(bestActionFrom);
@@ -38,7 +50,7 @@ public class AlphaBetaSearch {
 			return temp.eval();
 		}
 		
-		ArrayList<Integer> legalActions = temp.legalActions();
+		ArrayList<Integer> legalActions = temp.legalActions(role);
 		//System.out.println("max legalActions: " + legalActions);
 		int v = 0;
 		for(int i = 0; i < legalActions.size(); i += 4)
@@ -51,7 +63,9 @@ public class AlphaBetaSearch {
 			//System.out.println(legalActions);
 			//temp.printBoard();
 			//temp.printPawns();
-			temp.updateState(checkActionFrom, checkActionTo);
+			//System.out.println("max before ? " + temp.isWhite());
+			temp.updateState(checkActionFrom, checkActionTo, role);
+			//System.out.println("maxafter ? " + temp.isWhite());
 			v = Math.max(v, minValue(temp, alpha, beta, depth+1));
 
 			if(v >= beta )
@@ -82,7 +96,7 @@ public class AlphaBetaSearch {
 			return temp.eval();
 		}
 		
-		ArrayList<Integer> legalActions = temp.legalActions();
+		ArrayList<Integer> legalActions = temp.legalActions(enemy);
 		//System.out.println("min legalActions: " + legalActions);
 		int v = 100;
 		for(int i = 0; i < legalActions.size(); i += 4)
@@ -95,7 +109,9 @@ public class AlphaBetaSearch {
 			//System.out.println(legalActions);
 			//temp.printBoard();
 			//temp.printPawns();
-			temp.updateState(checkActionFrom, checkActionTo);
+			//System.out.println("min before ? " + temp.isWhite());
+			temp.updateState(checkActionFrom, checkActionTo, enemy);
+			//System.out.println("minafter ? " + temp.isWhite());
 			v = Math.min(v, maxValue(temp, alpha, beta, depth+1));
 			
 			if(v <= alpha)

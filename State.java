@@ -24,7 +24,7 @@ public class State {
 	{
 		this.height = barry.height;
 		this.width = barry.width;
-		coord = new Pair<Integer, Integer>(barry.coord.getLeft(), barry.coord.getRight());
+		coord = new Pair<Integer, Integer>(-1, -1);
 		whitePawns = new ArrayList<Pair<Integer, Integer>>();
 		blackPawns = new ArrayList<Pair<Integer, Integer>>();
 		for(Pair<Integer, Integer> white : barry.whitePawns)
@@ -80,11 +80,11 @@ public class State {
 		return whitePawns.size();
 	}
 
-	public ArrayList<Integer>legalActions()
+	public ArrayList<Integer>legalActions(String role)
 	{
 		ArrayList<Integer> legal = new ArrayList<Integer>();
 		
-		if(white)
+		if(role.equals("white"))
 		{
 			
 			for(int i = 0; i < whitePawns.size(); i++)
@@ -119,7 +119,7 @@ public class State {
 				}				
 			}
 		}
-		else
+		else if(role.equals("black"))
 		{
 			for(int i = 0; i < blackPawns.size(); i++)
 			{
@@ -158,10 +158,10 @@ public class State {
 		return legal;
 	}
 
-	public void updateState(Pair<Integer, Integer> from,Pair<Integer, Integer> to)
+	public void updateState(Pair<Integer, Integer> from,Pair<Integer, Integer> to, String role)
 	{	
 		//System.out.println("UpdateState white is: " + white);
-		if (white) 
+		if (role.equals("white")) 
 		{
 			int temp = whitePawns.indexOf(from);
 			if(temp >= 0)
@@ -175,7 +175,7 @@ public class State {
 				}
 			}	
 		} 
-		else 
+		else if(role.equals("black"))
 		{
 			int temp = blackPawns.indexOf(from);
 			if(temp >= 0)
@@ -189,7 +189,6 @@ public class State {
 				}
 			}
 		}
-		white = !white;
 	}
 	/*
 	public State result(Pair<Integer, Integer> from, Pair<Integer, Integer>to)
@@ -245,7 +244,7 @@ public class State {
 		{
 			return 100;
 		}
-		else if(this.legalActions().size() == 0)
+		else if(this.legalActions("white").size() == 0 || this.legalActions("black").size() == 0)
 		{
 			return 50;
 		}
