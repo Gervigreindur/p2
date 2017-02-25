@@ -41,8 +41,8 @@ public class OurAgent implements Agent
     		}
    			System.out.println(roleOfLastPlayer + " moved from " + x1 + "," + y1 + " to " + x2 + "," + y2);
     		// TODO: 1. update your internal world model according to the action that was just executed
-   			
     		environment.updateState(new Pair<Integer, Integer>(x1, y1), new Pair<Integer, Integer>(x2, y2));
+    		environment.sort();
     		environment.printBoard();
     		environment.printPawns();
     		
@@ -54,11 +54,11 @@ public class OurAgent implements Agent
 			// TODO: 2. run alpha-beta search to determine the best move
 			// Here we just construct a random move (that will most likely not even be possible),
 			// this needs to be replaced with the actual best move.
-			AlphaBetaSearch abs = new AlphaBetaSearch();
+			AlphaBetaSearch abs = new AlphaBetaSearch((10));
 			
 			ArrayList<Pair<Integer, Integer>> nextMove = abs.alphaBetaSearch(environment);
-			System.out.println("legal moves: "  + nextMove.get(0).getLeft() + " " + nextMove.get(0).getRight() + " " + nextMove.get(1).getLeft() + " " + nextMove.get(1).getRight());
-			
+			System.out.println("Our move: "  + nextMove.get(0).getLeft() + " " + nextMove.get(0).getRight() + " " + nextMove.get(1).getLeft() + " " + nextMove.get(1).getRight());
+			System.out.println(" ");
 			return "(move " + nextMove.get(0).getLeft() + " " + nextMove.get(0).getRight() + " " + nextMove.get(1).getLeft() + " " + nextMove.get(1).getRight() + ")";
 		} else {
 			return "noop";

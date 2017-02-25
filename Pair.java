@@ -1,5 +1,7 @@
 package p2;
 
+import java.util.Comparator;
+
 public class Pair<L,R> {
 
   private L left;
@@ -24,10 +26,31 @@ public class Pair<L,R> {
 	  return this.left.equals(pairo.getLeft()) && this.right.equals(pairo.getRight());
   }
 
-public void change(L x, R y) {
-	this.left = x; 
-	this.right = y;
-}
-
+  public void change(L x, R y) {
+		this.left = x; 
+		this.right = y;
+	}
+  
+  public static Comparator<Pair<Integer, Integer>> ascendingComparator = new Comparator<Pair<Integer, Integer>>() {
+	  
+	@Override
+	public int compare(Pair<Integer, Integer> o1, Pair<Integer, Integer> o2) {
+		  Integer y1 = o1.getRight();
+		  Integer y2 = o2.getRight();
+		  
+		  return y1 - y2;
+	}
+  };
+  
+  public static Comparator<Pair<Integer, Integer>> decendingComparator = new Comparator<Pair<Integer, Integer>>() {
+	  
+		@Override
+		public int compare(Pair<Integer, Integer> o1, Pair<Integer, Integer> o2) {
+			  Integer y1 = o1.getRight();
+			  Integer y2 = o2.getRight();
+			  
+			  return y2 - y1;
+		}
+	  };
 
 }
