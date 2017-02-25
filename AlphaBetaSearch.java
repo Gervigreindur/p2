@@ -6,26 +6,31 @@ public class AlphaBetaSearch {
 
 	private Pair<Integer, Integer> bestActionFrom;
 	private Pair<Integer, Integer> bestActionTo;
+	private int cutoff;
 	
-	AlphaBetaSearch()
+	AlphaBetaSearch(int cutoff)
 	{
+		this.cutoff = cutoff;
 		bestActionFrom = new Pair<Integer, Integer>(-1, -1);
 		bestActionTo = new Pair<Integer, Integer>(-1, -1);
 	}
 	
 	public ArrayList<Pair<Integer, Integer>> alphaBetaSearch(State state) {					
 		
-		maxValue(state, 0, 100);
+		maxValue(state, 0, 100, 0);
 		ArrayList<Pair<Integer, Integer>> bestResult = new ArrayList<Pair<Integer, Integer>>();
 		bestResult.add(bestActionFrom);
 		bestResult.add(bestActionTo);
 		return bestResult;
 	}
 
-	private int maxValue(State state, int alpha, int beta) {
+	private int maxValue(State state, int alpha, int beta, int depth) {
 		State temp = new State(state);
-		if(temp.terminalTest()) 
+		
+		
+		if(temp.terminalTest() || depth == cutoff) 
 		{
+			//System.out.println("max depth: " + depth);
 			return temp.utility();
 		}
 		
@@ -42,7 +47,7 @@ public class AlphaBetaSearch {
 			//temp.printBoard();
 			//temp.printPawns();
 			temp.updateState(checkActionFrom, checkActionTo);
-			v = Math.max(v, minValue(temp, alpha, beta));
+			v = Math.max(v, minValue(temp, alpha, beta, depth++));
 			
 			if(v >= beta)
 			{
@@ -55,11 +60,13 @@ public class AlphaBetaSearch {
 		return v;
 	}
 
-	private int minValue(State state, int alpha, int beta) {
+	private int minValue(State state, int alpha, int beta, int depth) {
 		
 		State temp = new State(state);
-		if(temp.terminalTest()) 
+		
+		if(temp.terminalTest() || depth == cutoff) 
 		{
+			//System.out.println("min depth: " + depth);
 			return temp.utility();
 		}
 		
@@ -76,10 +83,10 @@ public class AlphaBetaSearch {
 			//temp.printBoard();
 			//temp.printPawns();
 			temp.updateState(checkActionFrom, checkActionTo);
-			v = Math.min(v, maxValue(temp, alpha, beta));
+			v = Math.min(v, maxValue(temp, alpha, beta, depth++));
 			
 			if(v <= alpha)
-			{
+			{	
 				return v;
 			}
 			beta = Math.min(beta, v);

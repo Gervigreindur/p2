@@ -1,6 +1,8 @@
 package p2;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 
@@ -8,8 +10,8 @@ public class State {
 	
 	private int height;
 	private int width;
-	public ArrayList<Pair<Integer, Integer>> whitePawns;
-	public ArrayList<Pair<Integer, Integer>> blackPawns;
+	private List<Pair<Integer, Integer>> whitePawns;
+	private List<Pair<Integer, Integer>> blackPawns;
 	private Pair<Integer, Integer> coord;
 	private boolean white;  	//white = true, black = false
 	
@@ -119,7 +121,6 @@ public class State {
 		}
 		else
 		{
-			
 			for(int i = 0; i < blackPawns.size(); i++)
 			{
 				//todo: send all possible actions for black player
@@ -172,8 +173,7 @@ public class State {
 					//System.out.println("removed BLACK Pawn at: " + blackPawns.indexOf(to) + " " + blackPawns.get(blackPawns.indexOf(to)).getLeft() + " " + blackPawns.get(blackPawns.indexOf(to)).getRight());
 					blackPawns.remove(blackPawns.indexOf(to));
 				}
-			}
-			
+			}	
 		} 
 		else 
 		{
@@ -298,7 +298,7 @@ public class State {
 	/**
 	 * @return the whitePawns
 	 */
-	public ArrayList<Pair<Integer, Integer>> getWhitePawns() {
+	public List<Pair<Integer, Integer>> getWhitePawns() {
 		return whitePawns;
 	}
 
@@ -312,7 +312,7 @@ public class State {
 	/**
 	 * @return the blackPawns
 	 */
-	public ArrayList<Pair<Integer, Integer>> getBlackPawns() {
+	public List<Pair<Integer, Integer>> getBlackPawns() {
 		return blackPawns;
 	}
 
@@ -327,4 +327,10 @@ public class State {
 	{
 		return (x > 0 && x <= width) && (y > 0 && y <= height);
 	}
+
+	public void sort() {
+		Collections.sort(whitePawns, Pair.decendingComparator);
+		Collections.sort(blackPawns, Pair.ascendingComparator);
+	}
+
 }
