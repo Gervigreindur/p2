@@ -10,6 +10,8 @@ public class AlphaBetaSearch {
 	private String role;
 	private String enemy;
 	
+	ArrayList<Pair<Integer, Integer>> bestResult;
+	
 	AlphaBetaSearch(int cutoff, String role)
 	{
 		this.cutoff = cutoff;
@@ -22,41 +24,72 @@ public class AlphaBetaSearch {
 		{
 			enemy = "white";
 		}
-		
+		bestResult = new ArrayList<Pair<Integer, Integer>>();
 		bestActionFrom = new Pair<Integer, Integer>(-1, -1);
 		bestActionTo = new Pair<Integer, Integer>(-1, -1);
 	}
 	
 	public ArrayList<Pair<Integer, Integer>> alphaBetaSearch(State state) {					
+		System.out.println("MyRole: " + role);
+		System.out.println("EnemyRole: " + enemy);
 		
-		maxValue(state, 0, 100, 0);
-		ArrayList<Pair<Integer, Integer>> bestResult = new ArrayList<Pair<Integer, Integer>>();
+		ArrayList<Integer> legalActions = state.legalActions(role);
+		//System.out.println(legalActions);
+		int v = 0;
+		int alpha = 0;
+		int beta = 100;
+
+		for(int i = 0; i < legalActions.size(); i += 4)
+		{
+			Pair<Integer, Integer> checkActionFrom = new Pair<Integer, Integer>(legalActions.get(i), legalActions.get(i + 1));
+			Pair<Integer, Integer> checkActionTo = new Pair<Integer, Integer>(legalActions.get(i + 2 ), legalActions.get(i + 3));
+			State temp = new State(state);
+			
+			temp.updateState(checkActionFrom, checkActionTo, role);
+			v = Math.max(v, minValue(temp, alpha, beta, 0));
+			System.out.println(v);
+			if(v >= beta )
+			{
+				bestActionFrom = new Pair<Integer, Integer>(legalActions.get(i), legalActions.get(i + 1));
+				bestActionTo = new Pair<Integer, Integer>(legalActions.get(i + 2), legalActions.get(i + 3));
+				System.out.println("best action found!" + legalActions.get(i) + " " + legalActions.get(i + 1) + " " + legalActions.get(i + 2) + legalActions.get(i + 3));
+				if(v == 100)
+				{
+					break;
+				}
+			}
+			alpha = Math.max(alpha, v);
+
+		}
 		bestResult.add(bestActionFrom);
 		bestResult.add(bestActionTo);
+		
+		
 		return bestResult;
 	}
 
 	private int maxValue(State state, int alpha, int beta, int depth) {
-		State temp = new State(state);
-			
-		if(temp.terminalTest()) 
+		
+		if(state.terminalTest(role)) 
 		{
 			//System.out.println("max depth: " + depth);
-			return temp.utility();
+			return state.utility(role);
 		}
 		
+		//System.out.println("max: " + depth);
 		if(depth == cutoff)
-		{
-			return temp.eval();
+		{			
+			return state.eval(role);
 		}
 		
-		ArrayList<Integer> legalActions = temp.legalActions(role);
+		ArrayList<Integer> legalActions = state.legalActions(role);
 		//System.out.println("max legalActions: " + legalActions);
 		int v = 0;
 		for(int i = 0; i < legalActions.size(); i += 4)
 		{
 			Pair<Integer, Integer> checkActionFrom = new Pair<Integer, Integer>(legalActions.get(i), legalActions.get(i + 1));
 			Pair<Integer, Integer> checkActionTo = new Pair<Integer, Integer>(legalActions.get(i + 2 ), legalActions.get(i + 3));
+			State temp = new State(state);
 			//System.out.println("before min called: is white? " + temp.isWhite() );
 			//System.out.println("from: " + checkActionFrom.getLeft() + " " + checkActionFrom.getRight());
 			//System.out.println("to: " + checkActionTo.getLeft() + " " + checkActionTo.getRight());
@@ -65,14 +98,13 @@ public class AlphaBetaSearch {
 			//temp.printPawns();
 			//System.out.println("max before ? " + temp.isWhite());
 			temp.updateState(checkActionFrom, checkActionTo, role);
+			
 			//System.out.println("maxafter ? " + temp.isWhite());
 			v = Math.max(v, minValue(temp, alpha, beta, depth+1));
 
 			if(v >= beta )
 			{
 				//System.out.println("best action found!" + legalActions.get(i) + " " + legalActions.get(i + 1) + " " + legalActions.get(i + 2) + legalActions.get(i + 3));
-				bestActionFrom = new Pair<Integer, Integer>(legalActions.get(i), legalActions.get(i + 1));
-				bestActionTo = new Pair<Integer, Integer>(legalActions.get(i + 2), legalActions.get(i + 3));
 				return v;
 			}
 			alpha = Math.max(alpha, v);
@@ -82,27 +114,30 @@ public class AlphaBetaSearch {
 
 	private int minValue(State state, int alpha, int beta, int depth) {
 		
-		State temp = new State(state);
 		
-		if(temp.terminalTest() ) 
+		
+		if(state.terminalTest(role) ) 
 		{
 			//System.out.println("min depth: " + depth);
 			
-			return temp.utility(); 
+			return state.utility(role); 
 		}
 		
+		//System.out.println("min: " + depth);
 		if(depth == cutoff)
 		{
-			return temp.eval();
+
+			return state.eval(enemy);
 		}
 		
-		ArrayList<Integer> legalActions = temp.legalActions(enemy);
+		ArrayList<Integer> legalActions = state.legalActions(enemy);
 		//System.out.println("min legalActions: " + legalActions);
 		int v = 100;
 		for(int i = 0; i < legalActions.size(); i += 4)
 		{
 			Pair<Integer, Integer> checkActionFrom = new Pair<Integer, Integer>(legalActions.get(i), legalActions.get(i + 1));
 			Pair<Integer, Integer> checkActionTo = new Pair<Integer, Integer>(legalActions.get(i + 2 ), legalActions.get(i + 3));
+			State temp = new State(state);
 			//System.out.println("before max called: is white? " + temp.isWhite() );
 			//System.out.println("from: " + checkActionFrom.getLeft() + " " + checkActionFrom.getRight());
 			//System.out.println("to: " + checkActionTo.getLeft() + " " + checkActionTo.getRight());

@@ -198,9 +198,9 @@ public class State {
 		return nextState;
 	}
 	*/
-	public boolean terminalTest()
+	public boolean terminalTest(String role)
 	{
-		if(blackPawns.size() == 0 || whitePawns.size() == 0 || goalTest())
+		if(blackPawns.size() == 0 || whitePawns.size() == 0 || goalTest(role))
 		{
 			return true;
 		}
@@ -208,24 +208,26 @@ public class State {
 		return false;
 	}
 	
-	public boolean goalTest() 
+	public boolean goalTest(String role) 
 	{
-		if(white)
+		if(role.equals("white"))
 		{			
 			for(int i = 0; i < whitePawns.size(); i++)
 			{
 				if(whitePawns.get(i).getRight().equals(height))
 				{
+					//System.out.println("Goal Test for white is true");
 					return true;
 				}
 			}
 		}
-		else
+		else if(role.equals("black"))
 		{
 			for(int i = 0; i < blackPawns.size(); i++)
 			{
 				if(blackPawns.get(i).getRight().equals(1))
 				{
+					//System.out.println("Goal Test for black is true");
 					return true;
 				}
 			}
@@ -233,15 +235,21 @@ public class State {
 		return false;
 	}
 	
-	public Integer eval()
+	public Integer eval(String role)
 	{
-		return 50 - (height - whitePawns.get(0).getRight()) + blackPawns.get(0).getRight() - 1;	
+		if(!whitePawns.isEmpty() || !blackPawns.isEmpty())
+		{
+			return 100;
+			//return utility() + 50 - (height - whitePawns.get(0).getRight()) + blackPawns.get(0).getRight() - 1;	
+		}
+		return 0;
 	}
 	
-	public Integer utility()
+	public Integer utility(String role)
 	{
-		if(goalTest())
+		if(goalTest(role))
 		{
+			//System.out.println(role + "found utility state, 100points");
 			return 100;
 		}
 		else if(this.legalActions("white").size() == 0 || this.legalActions("black").size() == 0)
