@@ -91,7 +91,7 @@ public class State {
 				int x1 = (int) whitePawns.get(i).getLeft();
 				int y1 = (int) whitePawns.get(i).getRight();
 				coord.change(x1, y1+1);
-				if(y1+1 <= height && !blackPawns.contains(coord) && !whitePawns.contains(coord))
+				if(inBounds(x1, y1 + 1) && !blackPawns.contains(coord) && !whitePawns.contains(coord))
 				{
 					legal.add(x1);
 					legal.add(y1);
@@ -99,7 +99,7 @@ public class State {
 					legal.add(y1 + 1);					
 				}
 				coord.change(x1 - 1, y1+1);
-				if(y1+1 <= height && (x1 - 1) > 0 && blackPawns.contains(coord))
+				if(inBounds(x1 - 1, y1 + 1)  && blackPawns.contains(coord))
 				{
 					legal.add(x1);
 					legal.add(y1);
@@ -108,7 +108,7 @@ public class State {
 					
 				}
 				coord.change(x1 + 1, y1 + 1);
-				if(y1+1 <= height && x1 + 1 <= width && blackPawns.contains(coord))
+				if(inBounds(x1 + 1, y1 + 1) && blackPawns.contains(coord))
 				{					
 					legal.add(x1);
 					legal.add(y1);
@@ -126,7 +126,7 @@ public class State {
 				int x1 = (int) blackPawns.get(i).getLeft();
 				int y1 = (int) blackPawns.get(i).getRight();
 				coord.change(x1, y1 - 1);
-				if(y1 - 1 > 0 && !blackPawns.contains(coord) && !whitePawns.contains(coord))
+				if(inBounds(x1, y1 - 1) && !blackPawns.contains(coord) && !whitePawns.contains(coord))
 				{
 					legal.add(x1);
 					legal.add(y1);
@@ -135,7 +135,7 @@ public class State {
 					
 				}
 				coord.change(x1 - 1, y1 - 1);
-				if(y1 - 1 > 0 && (x1 - 1) > 0 && whitePawns.contains(coord))
+				if(inBounds(x1 -1, y1 - 1) && whitePawns.contains(coord))
 				{
 					legal.add(x1);
 					legal.add(y1);
@@ -144,7 +144,7 @@ public class State {
 				
 				}
 				coord.change(x1 + 1, y1 - 1);
-				if(y1 - 1 > 0 && x1 + 1 <= width && whitePawns.contains(coord))
+				if(inBounds(x1 + 1, y1 - 1) && whitePawns.contains(coord))
 				{
 					legal.add(x1);
 					legal.add(y1);
@@ -323,5 +323,8 @@ public class State {
 		this.blackPawns = blackPawns;
 	}
 
-
+	private boolean inBounds(int x, int y)
+	{
+		return (x > 0 && x <= width) && (y > 0 && y <= height);
+	}
 }
