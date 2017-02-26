@@ -33,7 +33,7 @@ public class AlphaBetaSearch {
 			
 			State temp = new State(state);		
 			temp.updateState(checkActionFrom, checkActionTo);
-			v = Math.max(v, minValue(temp, alpha, beta, 0));
+			v = Math.max(v, minValue(temp, v, beta, 1));
 			System.out.println(v);
 			if(v >= beta )
 			{
@@ -87,7 +87,7 @@ public class AlphaBetaSearch {
 			temp.updateState(checkActionFrom, checkActionTo);
 			temp.sort();
 			//System.out.println("minafter ? " + temp.isWhite());
-			v = Math.min(v, maxValue(temp, alpha, beta, depth+1));
+			v = Math.min(v, maxValue(temp, alpha, v, depth+1));
 			if(v == 100)
 			{
 				System.out.println("min: " +v );
@@ -135,7 +135,7 @@ public class AlphaBetaSearch {
 			temp.updateState(checkActionFrom, checkActionTo);
 			temp.sort();
 			//System.out.println("maxafter ? " + temp.isWhite());
-			v = Math.max(v, minValue(temp, alpha, beta, depth+1));
+			v = Math.max(v, minValue(temp, v, beta, depth+1));
 			if(v == 100)
 			{
 				System.out.println("max: " + v);
