@@ -262,13 +262,13 @@ public class State {
 		
 		if(!isWhite())
 		{
-			result = (50 - (height - Wmax) + (Bmin - 1) + whitePawns.size() - blackPawns.size());
-			System.out.println(result);
+			result = (100 - (height - Wmax) + (Bmin - 1) + whitePawns.size() - blackPawns.size());
+			//System.out.println(result);
 			return result;
 		}
 		else if(isWhite())
 		{
-			return (50 + (height - Wmax) - (Bmin - 1) - whitePawns.size() + blackPawns.size());
+			return (100 + (height - Wmax) - (Bmin - 1) - whitePawns.size() + blackPawns.size());
 		}
 		return 0;
 	}

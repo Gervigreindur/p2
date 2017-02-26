@@ -43,10 +43,10 @@ public class AlphaBetaSearch {
 				bestActionFrom = new Pair<Integer, Integer>(legalActions.get(i), legalActions.get(i + 1));
 				bestActionTo = new Pair<Integer, Integer>(legalActions.get(i + 2), legalActions.get(i + 3));
 				System.out.println("best action found!" + legalActions.get(i) + " " + legalActions.get(i + 1) + " " + legalActions.get(i + 2) + legalActions.get(i + 3));
-				/*if(v >= 100)
+				if(v == 100)
 				{
 					break;
-				}*/
+				}
 			}
 			alpha = Math.max(alpha, v);
 
@@ -71,7 +71,7 @@ public class AlphaBetaSearch {
 		if(state.terminalTest() || depth >= cutoff)
 		{
 			int best = state.eval();
-			System.out.println("BEST MOVE SAMKVAEMT EVAL(): " + best); 
+			//System.out.println("BEST MOVE SAMKVAEMT EVAL(): " + best); 
 			return best;
 		}
 		
