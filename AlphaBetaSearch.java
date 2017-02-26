@@ -97,10 +97,19 @@ public class AlphaBetaSearch {
 			//temp.printBoard();
 			//temp.printPawns();
 			//System.out.println("max before ? " + temp.isWhite());
-			temp.updateState(checkActionFrom, checkActionTo, role);
-			
+			temp.updateState(checkActionFrom, checkActionTo, role);			
 			//System.out.println("maxafter ? " + temp.isWhite());
-			v = Math.max(v, minValue(temp, alpha, beta, depth+1));
+			
+			int fromMin = minValue(temp, alpha, beta, depth++);
+			
+			if(fromMin <= alpha)
+			{
+				break;
+			}
+			else
+			{
+				v = fromMin;
+			}
 
 			if(v >= beta )
 			{
@@ -146,8 +155,18 @@ public class AlphaBetaSearch {
 			//temp.printPawns();
 			//System.out.println("min before ? " + temp.isWhite());
 			temp.updateState(checkActionFrom, checkActionTo, enemy);
+			int fromMax = maxValue(temp, alpha, beta, depth++);
+			
+			if(fromMax >= beta)
+			{
+				break;
+			}
+			else
+			{
+				v = fromMax;
+			}
 			//System.out.println("minafter ? " + temp.isWhite());
-			v = Math.min(v, maxValue(temp, alpha, beta, depth+1));
+			v = Math.min(v, fromMax);
 			
 			if(v <= alpha)
 			{	
