@@ -94,17 +94,20 @@ public class AlphaBetaSearch {
 			//System.out.println("from: " + checkActionFrom.getLeft() + " " + checkActionFrom.getRight());
 			//System.out.println("to: " + checkActionTo.getLeft() + " " + checkActionTo.getRight());
 			//System.out.println(legalActions);
+			//System.out.println("Printing board from max  before update with depth: " + depth + "and i = " + i);
 			//temp.printBoard();
-			//temp.printPawns();
 			//System.out.println("max before ? " + temp.isWhite());
 			temp.updateState(checkActionFrom, checkActionTo, role);
-			
+			//System.out.println("Printing board from max  after update with depth: " + depth + "and i = " + i);
+			//temp.printBoard();
 			//System.out.println("maxafter ? " + temp.isWhite());
 			v = Math.max(v, minValue(temp, alpha, beta, depth+1));
 
 			if(v >= beta )
 			{
-				//System.out.println("best action found!" + legalActions.get(i) + " " + legalActions.get(i + 1) + " " + legalActions.get(i + 2) + legalActions.get(i + 3));
+				//temp.printBoard();
+				//temp.printPawns();
+				//System.out.println("v >= beta from depth: " + depth + " i = " + i);
 				return v;
 			}
 			alpha = Math.max(alpha, v);
@@ -114,19 +117,16 @@ public class AlphaBetaSearch {
 
 	private int minValue(State state, int alpha, int beta, int depth) {
 		
-		
-		
-		if(state.terminalTest(role) ) 
+		if(state.terminalTest(enemy) ) 
 		{
 			//System.out.println("min depth: " + depth);
 			
-			return state.utility(role); 
+			return state.utility(enemy); 
 		}
 		
 		//System.out.println("min: " + depth);
 		if(depth == cutoff)
 		{
-
 			return state.eval(enemy);
 		}
 		
@@ -144,13 +144,18 @@ public class AlphaBetaSearch {
 			//System.out.println(legalActions);
 			//temp.printBoard();
 			//temp.printPawns();
-			//System.out.println("min before ? " + temp.isWhite());
+			//System.out.println("Printing board from min before update with depth: " + depth + "and i = " + i);
+			//temp.printBoard();
 			temp.updateState(checkActionFrom, checkActionTo, enemy);
-			//System.out.println("minafter ? " + temp.isWhite());
+			//System.out.println("Printing board from min after update with depth: " + depth + "and i = " + i);
+			//temp.printBoard();
 			v = Math.min(v, maxValue(temp, alpha, beta, depth+1));
 			
 			if(v <= alpha)
 			{	
+				//System.out.println("v <= alpha from depth: " + depth + " i = " + i);
+				//temp.printBoard();
+				//temp.printPawns();
 				return v;
 			}
 			beta = Math.min(beta, v);

@@ -249,15 +249,23 @@ public class State {
 	{
 		if(goalTest(role))
 		{
-			//System.out.println(role + "found utility state, 100points");
-			return 100;
+			//System.out.println(role + "found utility state");
+			if(role.equals("white"))
+			{
+				return 100;
+			}
+			else if(role.equals("black"))
+			{
+				return 0;
+			}
+			
 		}
 		else if(this.legalActions("white").size() == 0 || this.legalActions("black").size() == 0)
 		{
 			return 50;
 		}
 		
-		return 0;
+		return -1;
 	}
 
 	public void printPawns()
