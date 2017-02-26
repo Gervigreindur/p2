@@ -116,11 +116,11 @@ public class AlphaBetaSearch {
 		
 		
 		
-		if(state.terminalTest(role) ) 
+		if(state.terminalTest(enemy) ) 
 		{
 			//System.out.println("min depth: " + depth);
 			
-			return state.utility(role); 
+			return state.utility(enemy); 
 		}
 		
 		//System.out.println("min: " + depth);
