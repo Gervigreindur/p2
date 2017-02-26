@@ -7,11 +7,13 @@ public class AlphaBetaSearch {
 	private Pair<Integer, Integer> bestActionFrom;
 	private Pair<Integer, Integer> bestActionTo;
 	private int cutoff;
+	private String role;
 	
 	ArrayList<Pair<Integer, Integer>> bestResult;
 	
 	AlphaBetaSearch(int cutoff, String role)
 	{
+		this.role = role;
 		this.cutoff = cutoff;
 		bestResult = new ArrayList<Pair<Integer, Integer>>();
 		bestActionFrom = new Pair<Integer, Integer>(-1, -1);
@@ -34,7 +36,6 @@ public class AlphaBetaSearch {
 			State temp = new State(state);		
 			temp.updateState(checkActionFrom, checkActionTo);
 			v = Math.max(v, minValue(temp, alpha, beta, 0));
-			System.out.println(v);
 			if(v >= beta )
 			{
 				bestActionFrom = new Pair<Integer, Integer>(legalActions.get(i), legalActions.get(i + 1));
@@ -64,9 +65,12 @@ public class AlphaBetaSearch {
 		}
 		
 		//System.out.println("min: " + depth);
-		if(depth == cutoff)
+		//System.out.println("depth: " + depth + ", cutoff: " + cutoff);
+		if(depth >= cutoff)
 		{
-			return state.eval();
+			int best = state.eval(state, role);
+			System.out.println("BEST MOVE SAMKVAEMT EVAL(): " + best); 
+			return best;
 		}
 		
 		ArrayList<Integer> legalActions = state.legalActions();
@@ -90,7 +94,7 @@ public class AlphaBetaSearch {
 			v = Math.min(v, maxValue(temp, alpha, beta, depth+1));
 			if(v == 100)
 			{
-				System.out.println("min: " +v );
+				System.out.println("min: " + v);
 				break;
 			}
 			if(v <= alpha)
@@ -112,9 +116,12 @@ public class AlphaBetaSearch {
 		}
 		
 		//System.out.println("max: " + depth);
-		if(depth == cutoff)
+		//System.out.println("depth: " + depth + ", cutoff: " + cutoff);
+		if(depth >= cutoff)
 		{			
-			return state.eval();
+			int best = state.eval(state, role);
+			System.out.println("BEST MOVE SAMKVAEMT EVAL(): " + best); 
+			return best;
 		}
 		
 		ArrayList<Integer> legalActions = state.legalActions();

@@ -236,12 +236,40 @@ public class State {
 		return false;
 	}
 	
-	public Integer eval()
-	{
-		if(!whitePawns.isEmpty() || !blackPawns.isEmpty())
+	public int eval(State st, String role) 
+	{       
+		List<Pair<Integer, Integer>> white = st.getWhitePawns();
+		List<Pair<Integer, Integer>> black = st.getBlackPawns();
+		
+		int Wmax = 0;
+		int Bmin = height;
+		
+		for(int i = 0; i < white.size(); i++)
 		{
-			return 100;
-			//return utility() + 50 - (height - whitePawns.get(0).getRight()) + blackPawns.get(0).getRight() - 1;	
+			//System.out.println(white.get(i).getLeft() + ", " + white.get(i).getRight());
+			Wmax = Math.max(Wmax, white.get(i).getRight());
+		}
+		
+		//System.out.println("-----------   Wmax: " + Wmax + "   ------------");
+		
+		for(int i = 0; i < black.size(); i++)
+		{
+			//System.out.println(black.get(i).getLeft() + ", " + black.get(i).getRight());
+			Bmin = Math.max(Bmin, black.get(i).getRight());
+			
+		}
+		int result = 0;
+		//System.out.println("-----------   Bmin: " + Bmin + "   ------------");
+		
+		if(role.equals("white"))
+		{
+			result = (50 - (height - Wmax) + (Bmin - 1) + white.size() - black.size());
+			System.out.println(result);
+			return result;
+		}
+		else if(role.equals("black"))
+		{
+			return (50 + (height - Wmax) - (Bmin - 1) - white.size() + black.size());
 		}
 		return 0;
 	}
