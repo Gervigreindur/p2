@@ -24,7 +24,7 @@ public class OurAgent implements Agent
 		this.width = width;
 		this.height = height;
 		// TODO: add your own initialization code here
-		environment = new State(height, width);
+		environment = new State(height, width, role);
     }
 
 	// lastMove is null the first time nextAction gets called (in the initial state)
@@ -41,7 +41,7 @@ public class OurAgent implements Agent
     		}
    			System.out.println(roleOfLastPlayer + " moved from " + x1 + "," + y1 + " to " + x2 + "," + y2);
     		// TODO: 1. update your internal world model according to the action that was just executed
-    		environment.updateState(new Pair<Integer, Integer>(x1, y1), new Pair<Integer, Integer>(x2, y2), roleOfLastPlayer);
+    		environment.updateState(new Pair<Integer, Integer>(x1, y1), new Pair<Integer, Integer>(x2, y2));
     		//System.out.println("env.white(): " + environment.isWhite() + " roleLastPlayer: " + roleOfLastPlayer);
     		environment.sort();
     		environment.printBoard();

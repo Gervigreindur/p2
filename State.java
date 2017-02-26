@@ -13,11 +13,11 @@ public class State {
 	private List<Pair<Integer, Integer>> whitePawns;
 	private List<Pair<Integer, Integer>> blackPawns;
 	private Pair<Integer, Integer> coord;
-	public boolean white;  	//white = true, black = false
-	
+	public boolean whiteTurn;  	//white = true, black = false
+	public String player;
 
 	public boolean isWhite() {
-		return white;
+		return whiteTurn;
 	}
 	
 	public State(State barry)
@@ -25,8 +25,9 @@ public class State {
 		this.height = barry.height;
 		this.width = barry.width;
 		coord = new Pair<Integer, Integer>(-1, -1);
-		whitePawns = new ArrayList<Pair<Integer, Integer>>();
-		blackPawns = new ArrayList<Pair<Integer, Integer>>();
+		this.whitePawns = new ArrayList<Pair<Integer, Integer>>();
+		this.blackPawns = new ArrayList<Pair<Integer, Integer>>();
+		this.player = new String(barry.player);
 		for(Pair<Integer, Integer> white : barry.whitePawns)
 		{
 			//System.out.print("white: " + white.getLeft() + " " +  white.getRight());
@@ -36,22 +37,22 @@ public class State {
 		{
 			blackPawns.add(new Pair<Integer, Integer>(black.getLeft(), black.getRight()));
 		}
-		white = barry.white;
+		whiteTurn = barry.whiteTurn;
 	}
 	
-	State(int height, int width)
+	State(int height, int width, String role)
 	{
 		this.height = height;
 		this.width = width;
+		this.player = new String(role);
 		coord = new Pair<Integer, Integer>(0, 0);
 		whitePawns = new ArrayList<Pair<Integer, Integer>>();
 		blackPawns = new ArrayList<Pair<Integer, Integer>>();
-		white = true;
+		whiteTurn = true;
 		System.out.println("Initial!!");
 		setInitialBoard();
 		printBoard();
 		printPawns();
-		
 	}
 
 	public void setInitialBoard()
@@ -80,13 +81,12 @@ public class State {
 		return whitePawns.size();
 	}
 
-	public ArrayList<Integer>legalActions(String role)
+	public ArrayList<Integer>legalActions()
 	{
 		ArrayList<Integer> legal = new ArrayList<Integer>();
 		
-		if(role.equals("white"))
-		{
-			
+		if(whiteTurn)
+		{	
 			for(int i = 0; i < whitePawns.size(); i++)
 			{
 				//todo: send all possible actions for white player
@@ -119,7 +119,7 @@ public class State {
 				}				
 			}
 		}
-		else if(role.equals("black"))
+		else if(!whiteTurn)
 		{
 			for(int i = 0; i < blackPawns.size(); i++)
 			{
@@ -158,10 +158,10 @@ public class State {
 		return legal;
 	}
 
-	public void updateState(Pair<Integer, Integer> from,Pair<Integer, Integer> to, String role)
+	public void updateState(Pair<Integer, Integer> from,Pair<Integer, Integer> to)
 	{	
 		//System.out.println("UpdateState white is: " + white);
-		if (role.equals("white")) 
+		if (whiteTurn) 
 		{
 			int temp = whitePawns.indexOf(from);
 			if(temp >= 0)
@@ -175,7 +175,7 @@ public class State {
 				}
 			}	
 		} 
-		else if(role.equals("black"))
+		else if(!whiteTurn)
 		{
 			int temp = blackPawns.indexOf(from);
 			if(temp >= 0)
@@ -189,6 +189,7 @@ public class State {
 				}
 			}
 		}
+		whiteTurn = !whiteTurn;
 	}
 	/*
 	public State result(Pair<Integer, Integer> from, Pair<Integer, Integer>to)
@@ -198,9 +199,9 @@ public class State {
 		return nextState;
 	}
 	*/
-	public boolean terminalTest(String role)
+	public boolean terminalTest()
 	{
-		if(blackPawns.size() == 0 || whitePawns.size() == 0 || goalTest(role))
+		if(this.legalActions().isEmpty() || goalTest())
 		{
 			return true;
 		}
@@ -208,34 +209,34 @@ public class State {
 		return false;
 	}
 	
-	public boolean goalTest(String role) 
+	public boolean goalTest() 
 	{
-		if(role.equals("white"))
-		{			
-			for(int i = 0; i < whitePawns.size(); i++)
-			{
-				if(whitePawns.get(i).getRight().equals(height))
-				{
-					//System.out.println("Goal Test for white is true");
-					return true;
-				}
-			}
-		}
-		else if(role.equals("black"))
+		/* Check if the player who did in previous turn won */
+		if(whiteTurn)
 		{
 			for(int i = 0; i < blackPawns.size(); i++)
 			{
 				if(blackPawns.get(i).getRight().equals(1))
 				{
-					//System.out.println("Goal Test for black is true");
 					return true;
 				}
 			}
-		}	
+		}
+		else if(!whiteTurn)
+		{
+			for(int i = 0; i < whitePawns.size(); i++)
+			{
+				if(whitePawns.get(i).getRight().equals(height))
+				{
+					return true;
+				}
+			}
+		}
+		
 		return false;
 	}
 	
-	public Integer eval(String role)
+	public Integer eval()
 	{
 		if(!whitePawns.isEmpty() || !blackPawns.isEmpty())
 		{
@@ -245,32 +246,32 @@ public class State {
 		return 0;
 	}
 	
-	public Integer utility(String role)
+	public Integer utility()
 	{
-		if(goalTest(role))
+		if(player.equals("white") && !isWhite())
 		{
-			//System.out.println(role + "found utility state");
-			if(role.equals("white"))
-			{
-				return 100;
-			}
-			else if(role.equals("black"))
-			{
-				return 0;
-			}
-			
+			return 100;
 		}
-		else if(this.legalActions("white").size() == 0 || this.legalActions("black").size() == 0)
+		else if(player.equals("black") && isWhite())
+		{
+			return 100;
+		}
+		else if(player.equals("white") && isWhite())
+		{
+			return 0;
+		}
+		else if(player.equals("black") && !isWhite())
+		{
+			return 0;
+		}
+		else
 		{
 			return 50;
 		}
-		
-		return -1;
 	}
 
 	public void printPawns()
 	{
-		
 		System.out.println("black pawns:");
 		for(int i = 0; i < blackPawns.size(); i++)
 		{

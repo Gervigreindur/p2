@@ -7,33 +7,20 @@ public class AlphaBetaSearch {
 	private Pair<Integer, Integer> bestActionFrom;
 	private Pair<Integer, Integer> bestActionTo;
 	private int cutoff;
-	private String role;
-	private String enemy;
 	
 	ArrayList<Pair<Integer, Integer>> bestResult;
 	
 	AlphaBetaSearch(int cutoff, String role)
 	{
 		this.cutoff = cutoff;
-		this.role = role;
-		if(role.equals("white"))
-		{
-			enemy = "black";
-		}
-		else
-		{
-			enemy = "white";
-		}
 		bestResult = new ArrayList<Pair<Integer, Integer>>();
 		bestActionFrom = new Pair<Integer, Integer>(-1, -1);
 		bestActionTo = new Pair<Integer, Integer>(-1, -1);
 	}
 	
 	public ArrayList<Pair<Integer, Integer>> alphaBetaSearch(State state) {					
-		System.out.println("MyRole: " + role);
-		System.out.println("EnemyRole: " + enemy);
 		
-		ArrayList<Integer> legalActions = state.legalActions(role);
+		ArrayList<Integer> legalActions = state.legalActions();
 		//System.out.println(legalActions);
 		int v = 0;
 		int alpha = 0;
@@ -43,9 +30,9 @@ public class AlphaBetaSearch {
 		{
 			Pair<Integer, Integer> checkActionFrom = new Pair<Integer, Integer>(legalActions.get(i), legalActions.get(i + 1));
 			Pair<Integer, Integer> checkActionTo = new Pair<Integer, Integer>(legalActions.get(i + 2 ), legalActions.get(i + 3));
-			State temp = new State(state);
 			
-			temp.updateState(checkActionFrom, checkActionTo, role);
+			State temp = new State(state);		
+			temp.updateState(checkActionFrom, checkActionTo);
 			v = Math.max(v, minValue(temp, alpha, beta, 0));
 			System.out.println(v);
 			if(v >= beta )
@@ -67,70 +54,22 @@ public class AlphaBetaSearch {
 		
 		return bestResult;
 	}
-
-	private int maxValue(State state, int alpha, int beta, int depth) {
-		
-		if(state.terminalTest(role)) 
-		{
-			//System.out.println("max depth: " + depth);
-			return state.utility(role);
-		}
-		
-		//System.out.println("max: " + depth);
-		if(depth == cutoff)
-		{			
-			return state.eval(role);
-		}
-		
-		ArrayList<Integer> legalActions = state.legalActions(role);
-		//System.out.println("max legalActions: " + legalActions);
-		int v = 0;
-		for(int i = 0; i < legalActions.size(); i += 4)
-		{
-			Pair<Integer, Integer> checkActionFrom = new Pair<Integer, Integer>(legalActions.get(i), legalActions.get(i + 1));
-			Pair<Integer, Integer> checkActionTo = new Pair<Integer, Integer>(legalActions.get(i + 2 ), legalActions.get(i + 3));
-			State temp = new State(state);
-			//System.out.println("before min called: is white? " + temp.isWhite() );
-			//System.out.println("from: " + checkActionFrom.getLeft() + " " + checkActionFrom.getRight());
-			//System.out.println("to: " + checkActionTo.getLeft() + " " + checkActionTo.getRight());
-			//System.out.println(legalActions);
-			//System.out.println("Printing board from max  before update with depth: " + depth + "and i = " + i);
-			//temp.printBoard();
-			//System.out.println("max before ? " + temp.isWhite());
-			temp.updateState(checkActionFrom, checkActionTo, role);
-			//System.out.println("Printing board from max  after update with depth: " + depth + "and i = " + i);
-			//temp.printBoard();
-			//System.out.println("maxafter ? " + temp.isWhite());
-			v = Math.max(v, minValue(temp, alpha, beta, depth+1));
-
-			if(v >= beta )
-			{
-				//temp.printBoard();
-				//temp.printPawns();
-				//System.out.println("v >= beta from depth: " + depth + " i = " + i);
-				return v;
-			}
-			alpha = Math.max(alpha, v);
-		}
-		return v;
-	}
-
+	
 	private int minValue(State state, int alpha, int beta, int depth) {
 		
-		if(state.terminalTest(enemy) ) 
+		if(state.terminalTest() ) 
 		{
 			//System.out.println("min depth: " + depth);
-			
-			return state.utility(enemy); 
+			return state.utility(); 
 		}
 		
 		//System.out.println("min: " + depth);
 		if(depth == cutoff)
 		{
-			return state.eval(enemy);
+			return state.eval();
 		}
 		
-		ArrayList<Integer> legalActions = state.legalActions(enemy);
+		ArrayList<Integer> legalActions = state.legalActions();
 		//System.out.println("min legalActions: " + legalActions);
 		int v = 100;
 		for(int i = 0; i < legalActions.size(); i += 4)
@@ -144,21 +83,70 @@ public class AlphaBetaSearch {
 			//System.out.println(legalActions);
 			//temp.printBoard();
 			//temp.printPawns();
-			//System.out.println("Printing board from min before update with depth: " + depth + "and i = " + i);
-			//temp.printBoard();
-			temp.updateState(checkActionFrom, checkActionTo, enemy);
-			//System.out.println("Printing board from min after update with depth: " + depth + "and i = " + i);
-			//temp.printBoard();
+			//System.out.println("min before ? " + temp.isWhite());
+			temp.updateState(checkActionFrom, checkActionTo);
+			temp.sort();
+			//System.out.println("minafter ? " + temp.isWhite());
 			v = Math.min(v, maxValue(temp, alpha, beta, depth+1));
-			
+			if(v == 100)
+			{
+				System.out.println("min: " +v );
+				break;
+			}
 			if(v <= alpha)
 			{	
-				//System.out.println("v <= alpha from depth: " + depth + " i = " + i);
-				//temp.printBoard();
-				//temp.printPawns();
+				//System.out.println("Depth : " + depth + " i: " + i);
 				return v;
 			}
 			beta = Math.min(beta, v);
+		}
+		return v;
+	}
+
+	private int maxValue(State state, int alpha, int beta, int depth) {
+		
+		if(state.terminalTest()) 
+		{
+			//System.out.println("max depth: " + depth);
+			return state.utility();
+		}
+		
+		//System.out.println("max: " + depth);
+		if(depth == cutoff)
+		{			
+			return state.eval();
+		}
+		
+		ArrayList<Integer> legalActions = state.legalActions();
+		//System.out.println("max legalActions: " + legalActions);
+		int v = 0;
+		for(int i = 0; i < legalActions.size(); i += 4)
+		{
+			Pair<Integer, Integer> checkActionFrom = new Pair<Integer, Integer>(legalActions.get(i), legalActions.get(i + 1));
+			Pair<Integer, Integer> checkActionTo = new Pair<Integer, Integer>(legalActions.get(i + 2 ), legalActions.get(i + 3));
+			State temp = new State(state);
+			//System.out.println("before min called: is white? " + temp.isWhite() );
+			//System.out.println("from: " + checkActionFrom.getLeft() + " " + checkActionFrom.getRight());
+			//System.out.println("to: " + checkActionTo.getLeft() + " " + checkActionTo.getRight());
+			//System.out.println(legalActions);
+			//temp.printBoard();
+			//temp.printPawns();
+			//System.out.println("max before ? " + temp.isWhite());
+			temp.updateState(checkActionFrom, checkActionTo);
+			temp.sort();
+			//System.out.println("maxafter ? " + temp.isWhite());
+			v = Math.max(v, minValue(temp, alpha, beta, depth+1));
+			if(v == 100)
+			{
+				System.out.println("max: " + v);
+				break;
+			}
+			if(v >= beta )
+			{
+				//System.out.println("Depth : " + depth + " i: " + i);
+				return v;
+			}
+			alpha = Math.max(alpha, v);
 		}
 		return v;
 	}
