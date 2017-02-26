@@ -10,7 +10,7 @@ public class AlphaBetaSearch {
 	
 	ArrayList<Pair<Integer, Integer>> bestResult;
 	
-	AlphaBetaSearch(int cutoff, String role)
+	AlphaBetaSearch(int cutoff)
 	{
 		this.cutoff = cutoff;
 		bestResult = new ArrayList<Pair<Integer, Integer>>();
@@ -33,17 +33,20 @@ public class AlphaBetaSearch {
 			
 			State temp = new State(state);		
 			temp.updateState(checkActionFrom, checkActionTo);
+
 			v = Math.max(v, minValue(temp, v, beta, 1));
 			System.out.println(v);
+
+
 			if(v >= beta )
 			{
 				bestActionFrom = new Pair<Integer, Integer>(legalActions.get(i), legalActions.get(i + 1));
 				bestActionTo = new Pair<Integer, Integer>(legalActions.get(i + 2), legalActions.get(i + 3));
 				System.out.println("best action found!" + legalActions.get(i) + " " + legalActions.get(i + 1) + " " + legalActions.get(i + 2) + legalActions.get(i + 3));
-				if(v == 100)
+				/*if(v >= 100)
 				{
 					break;
-				}
+				}*/
 			}
 			alpha = Math.max(alpha, v);
 
@@ -57,16 +60,19 @@ public class AlphaBetaSearch {
 	
 	private int minValue(State state, int alpha, int beta, int depth) {
 		
-		if(state.terminalTest() ) 
+		/*if(state.terminalTest() ) 
 		{
 			//System.out.println("min depth: " + depth);
 			return state.utility(); 
-		}
+		}*/
 		
 		//System.out.println("min: " + depth);
-		if(depth == cutoff)
+		//System.out.println("depth: " + depth + ", cutoff: " + cutoff);
+		if(state.terminalTest() || depth >= cutoff)
 		{
-			return state.eval();
+			int best = state.eval();
+			System.out.println("BEST MOVE SAMKVAEMT EVAL(): " + best); 
+			return best;
 		}
 		
 		ArrayList<Integer> legalActions = state.legalActions();
@@ -87,10 +93,10 @@ public class AlphaBetaSearch {
 			temp.updateState(checkActionFrom, checkActionTo);
 			temp.sort();
 			//System.out.println("minafter ? " + temp.isWhite());
-			v = Math.min(v, maxValue(temp, alpha, v, depth+1));
+			v = Math.min(v, maxValue(temp, alpha, beta, depth+1));
 			if(v == 100)
 			{
-				System.out.println("min: " +v );
+				System.out.println("min: " + v);
 				break;
 			}
 			if(v <= alpha)
@@ -105,16 +111,19 @@ public class AlphaBetaSearch {
 
 	private int maxValue(State state, int alpha, int beta, int depth) {
 		
-		if(state.terminalTest()) 
+		/*if(state.terminalTest()) 
 		{
 			//System.out.println("max depth: " + depth);
 			return state.utility();
-		}
+		}*/
 		
 		//System.out.println("max: " + depth);
-		if(depth == cutoff)
+		//System.out.println("depth: " + depth + ", cutoff: " + cutoff);
+		if(state.terminalTest() || depth == cutoff)
 		{			
-			return state.eval();
+			int best = state.eval();
+			System.out.println("BEST MOVE SAMKVAEMT EVAL(): " + best); 
+			return best;
 		}
 		
 		ArrayList<Integer> legalActions = state.legalActions();
@@ -135,7 +144,7 @@ public class AlphaBetaSearch {
 			temp.updateState(checkActionFrom, checkActionTo);
 			temp.sort();
 			//System.out.println("maxafter ? " + temp.isWhite());
-			v = Math.max(v, minValue(temp, v, beta, depth+1));
+			v = Math.max(v, minValue(temp, alpha, beta, depth+1));
 			if(v == 100)
 			{
 				System.out.println("max: " + v);

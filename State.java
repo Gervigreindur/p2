@@ -236,12 +236,39 @@ public class State {
 		return false;
 	}
 	
-	public Integer eval()
-	{
-		if(!whitePawns.isEmpty() || !blackPawns.isEmpty())
+	public int eval() 
+	{       
+		if(goalTest())
 		{
-			return 100;
-			//return utility() + 50 - (height - whitePawns.get(0).getRight()) + blackPawns.get(0).getRight() - 1;	
+			return utility();
+		}
+		
+		int Wmax = 0;
+		int Bmin = 0;
+		//System.out.println(white.get(i).getLeft() + ", " + white.get(i).getRight());
+		if(!whitePawns.isEmpty())
+		{
+			Wmax = whitePawns.get(0).getRight();
+		}
+		
+		if(!blackPawns.isEmpty())
+		{
+			Bmin = blackPawns.get(0).getRight();
+		}
+		//System.out.println("-----------   Wmax: " + Wmax + "   ------------");
+		
+		int result = 0;
+		//System.out.println("-----------   Bmin: " + Bmin + "   ------------");
+		
+		if(!isWhite())
+		{
+			result = (50 - (height - Wmax) + (Bmin - 1) + whitePawns.size() - blackPawns.size());
+			System.out.println(result);
+			return result;
+		}
+		else if(isWhite())
+		{
+			return (50 + (height - Wmax) - (Bmin - 1) - whitePawns.size() + blackPawns.size());
 		}
 		return 0;
 	}

@@ -55,7 +55,7 @@ public class OurAgent implements Agent
 			// TODO: 2. run alpha-beta search to determine the best move
 			// Here we just construct a random move (that will most likely not even be possible),
 			// this needs to be replaced with the actual best move.
-			AlphaBetaSearch abs = new AlphaBetaSearch(50, role);
+			AlphaBetaSearch abs = new AlphaBetaSearch(50);
 			
 			ArrayList<Pair<Integer, Integer>> nextMove = abs.alphaBetaSearch(environment);
 
