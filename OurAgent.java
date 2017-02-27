@@ -9,7 +9,7 @@ public class OurAgent implements Agent
 	private Random random = new Random();
 	
 	private String role; // the name of this agent's role (white or black)
-	private int playclock; // this is how much time (in seconds) we have before nextAction needs to return a move
+	private long playclock; // this is how much time (in seconds) we have before nextAction needs to return a move
 	private boolean myTurn; // whether it is this agent's turn or not
 	private int width, height; // dimensions of the board
 	private State environment;
@@ -19,7 +19,7 @@ public class OurAgent implements Agent
 	*/
     public void init(String role, int width, int height, int playclock) {
 		this.role = role;
-		this.playclock = playclock;
+		this.playclock = System.currentTimeMillis() + playclock - 100;
 		myTurn = !role.equals("white");
 		this.width = width;
 		this.height = height;
@@ -55,7 +55,7 @@ public class OurAgent implements Agent
 			// TODO: 2. run alpha-beta search to determine the best move
 			// Here we just construct a random move (that will most likely not even be possible),
 			// this needs to be replaced with the actual best move.
-			AlphaBetaSearch abs = new AlphaBetaSearch();
+			AlphaBetaSearch abs = new AlphaBetaSearch(playclock);
 			
 			ArrayList<Pair<Integer, Integer>> nextMove = abs.alphaBetaSearch(environment);
 
