@@ -347,11 +347,11 @@ public class State {
 			
 			if(player.equals("white"))
 			{
-				return (50 + (height - Wmax) - (Bmin - 1) + whitePawns.size() - blackPawns.size() - defended + killers);
+				return (50 + (height - Wmax) - (Bmin - 1) + whitePawns.size() - blackPawns.size() + defended - killers);
 			}
 			else 
 			{
-				return (50 - (height - Wmax) + (Bmin - 1) - whitePawns.size() + blackPawns.size() + defended - killers);
+				return (50 - (height - Wmax) + (Bmin - 1) - whitePawns.size() + blackPawns.size() - defended + killers);
 			}
 			
 		}
@@ -400,11 +400,11 @@ public class State {
 			}
 			if(player.equals("black"))
 			{
-				return (50 + (height - Wmax) - (Bmin - 1) + whitePawns.size() - blackPawns.size() - defended + killers);
+				return (50 + (height - Wmax) - (Bmin - 1) + whitePawns.size() - blackPawns.size() + defended - killers);
 			}
 			else 
 			{
-				return (50 - (height - Wmax) + (Bmin - 1) - whitePawns.size() + blackPawns.size() + defended - killers);
+				return (50 - (height - Wmax) + (Bmin - 1) - whitePawns.size() + blackPawns.size() - defended + killers);
 			}
 			//return (50 + (height - Wmax) - (Bmin - 1) - whitePawns.size() + blackPawns.size());
 		}
