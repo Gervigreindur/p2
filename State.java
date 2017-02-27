@@ -9,7 +9,7 @@ import java.util.Set;
 public class State {
 	
 	private static int height;
-	private int width;
+	public int width;
 	private List<Pair<Integer, Integer>> whitePawns;
 	private List<Pair<Integer, Integer>> blackPawns;
 	private Pair<Integer, Integer> coord;

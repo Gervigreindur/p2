@@ -31,7 +31,7 @@ public class AlphaBetaSearch {
 		bestActionFrom = new Pair<Integer, Integer>(legalActions.get(0), legalActions.get(1));
 		bestActionTo = new Pair<Integer, Integer>(legalActions.get(2), legalActions.get(3));
 		
-		while(true)
+		while(cutoff < 4 * state.getHeight() * state.width)
 		{
 			try
 			{
@@ -77,7 +77,7 @@ public class AlphaBetaSearch {
 	private int minValue(State state, int alpha, int beta, int depth) throws TimeException {
 		if(System.currentTimeMillis() >= time)
 		{
-			System.out.println("time exceeded: " + depth + " " + System.currentTimeMillis());
+			//System.out.println("time exceeded: " + depth + " " + System.currentTimeMillis());
 			throw new TimeException();
 		}
 		
@@ -85,7 +85,7 @@ public class AlphaBetaSearch {
 		{
 			
 			int best = state.eval();
-			//System.out.println("BEST MOVE SAMKVAEMT EVAL() from min: " + Math.abs(best - depth) + "best is: " + best + " depth is: " + depth);
+			//System.out.println("BEST MOVE SAMKVAEMT EVAL() from min: " + best + "best is: " + best + " depth is: " + depth);
 			return best;
 			//eval*0.99^depth
 			//(eval-50)*0.99^depth
@@ -109,7 +109,7 @@ public class AlphaBetaSearch {
 			temp.updateState(checkActionFrom, checkActionTo);
 			temp.sort();
 			//System.out.println("minafter ? " + temp.isWhite());
-			int fromMax = maxValue(temp, alpha, beta, depth -= 1);
+			int fromMax = maxValue(temp, alpha, beta, depth - 1);
 			
 			if(fromMax < v)
 			{
@@ -137,7 +137,7 @@ public class AlphaBetaSearch {
 		if(state.terminalTest() || depth == 0)
 		{	
 			int best = state.eval();
-			//System.out.println("BEST MOVE SAMKVAEMT EVAL() from max: " + Math.abs(best - depth) + "best is: " + best + " depth is: " + depth); 
+			//System.out.println("BEST MOVE SAMKVAEMT EVAL() from max: " + best + "best is: " + best + " depth is: " + depth); 
 			return best;
 		}
 		
@@ -153,7 +153,7 @@ public class AlphaBetaSearch {
 			temp.updateState(checkActionFrom, checkActionTo);
 			temp.sort();
 			//System.out.println("maxafter ? " + temp.isWhite());
-			int fromMin = minValue(temp, alpha, beta, depth -= 1);
+			int fromMin = minValue(temp, alpha, beta, depth - 1);
 			
 			if(fromMin > v)
 			{
