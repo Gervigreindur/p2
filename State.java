@@ -244,8 +244,10 @@ public class State {
 		
 		int Wmax = 0;
 		int Bmin = 0;
+		int proteced = 0;
+		int killers = 0;
 		//System.out.println(white.get(i).getLeft() + ", " + white.get(i).getRight());
-		if(!whitePawns.isEmpty())
+		/*if(!whitePawns.isEmpty())
 		{
 			Wmax = whitePawns.get(0).getRight();
 		}
@@ -257,7 +259,7 @@ public class State {
 		//System.out.println("-----------   Wmax: " + Wmax + "   ------------");
 		
 		//System.out.println("-----------   Bmin: " + Bmin + "   ------------");
-		
+		*/
 		if(!isWhite())
 		{
 			ArrayList<Integer> legal = this.legalActions();
@@ -266,6 +268,24 @@ public class State {
 				if(legal.get(i+3).equals(1))
 				{
 					return 0;
+				}
+			}
+			for(int i = 0; i < whitePawns.size(); i++)
+			{
+				for(int j = 0; j < blackPawns.size(); j++)
+				{
+					if(whitePawns.get(i).getLeft().equals(blackPawns.get(j).getLeft() - 1) && whitePawns.get(i).getRight().equals(blackPawns.get(j).getRight() + 1) )
+					{
+						killers++;
+					}
+					if(whitePawns.get(i).getLeft().equals(blackPawns.get(j).getLeft() + 1) && whitePawns.get(i).getRight().equals(blackPawns.get(j).getRight() + 1) )
+					{
+						killers++;
+					}
+					if(whitePawns.get(i).getLeft().equals(blackPawns.get(j).getLeft() - 1) && whitePawns.get(i).getRight().equals(blackPawns.get(j).getRight() + 1) )
+					{
+						proteced++;
+					}
 				}
 			}
 			return (50 - (height - Wmax) + (Bmin - 1) + whitePawns.size() - blackPawns.size());

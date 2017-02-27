@@ -22,9 +22,9 @@ public class AlphaBetaSearch {
 		
 		ArrayList<Integer> legalActions = state.legalActions();
 		//System.out.println(legalActions);
-		int v = 0;
+		int v = -1;
 		int alpha = 0;
-		int beta = 0;
+		int beta = 101;
 		bestActionFrom = new Pair<Integer, Integer>(legalActions.get(0), legalActions.get(1));
 		bestActionTo = new Pair<Integer, Integer>(legalActions.get(2), legalActions.get(3));
 		for(int i = 0; i < legalActions.size(); i += 4)
@@ -35,7 +35,7 @@ public class AlphaBetaSearch {
 			State temp = new State(state);		
 			temp.updateState(checkActionFrom, checkActionTo);
 
-			v = Math.max(v, minValue(temp, alpha, 100, 0));
+			v = Math.max(v, minValue(temp, alpha, beta, 0));
 			System.out.println("from main v is: " + v + " and beta is: " + beta);
 
 			
@@ -45,10 +45,9 @@ public class AlphaBetaSearch {
 				bestActionFrom = new Pair<Integer, Integer>(legalActions.get(i), legalActions.get(i + 1));
 				bestActionTo = new Pair<Integer, Integer>(legalActions.get(i + 2), legalActions.get(i + 3));
 				System.out.println("best action found!" + legalActions.get(i) + " " + legalActions.get(i + 1) + " " + legalActions.get(i + 2) + legalActions.get(i + 3));
-				if(v == 100)
-				{
-					break;
-				}
+				
+				break;
+				
 			}
 			alpha = Math.max(alpha, v);
 
