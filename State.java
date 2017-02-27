@@ -244,22 +244,10 @@ public class State {
 		
 		int Wmax = 0;
 		int Bmin = 0;
-		int proteced = 0;
+		int defended = 0;
 		int killers = 0;
-		//System.out.println(white.get(i).getLeft() + ", " + white.get(i).getRight());
-		/*if(!whitePawns.isEmpty())
-		{
-			Wmax = whitePawns.get(0).getRight();
-		}
+	
 		
-		if(!blackPawns.isEmpty())
-		{
-			Bmin = blackPawns.get(0).getRight();
-		}
-		//System.out.println("-----------   Wmax: " + Wmax + "   ------------");
-		
-		//System.out.println("-----------   Bmin: " + Bmin + "   ------------");
-		*/
 		if(!isWhite())
 		{
 			ArrayList<Integer> legal = this.legalActions();
@@ -267,7 +255,63 @@ public class State {
 			{
 				if(legal.get(i+3).equals(1))
 				{
-					return 0;
+					if(player.equals("white"))
+					{
+						return 0;
+					}
+				}
+			}
+			for(int i = 0; i < blackPawns.size(); i++)
+			{
+				for(int j = 0; j < whitePawns.size(); j++)
+				{
+					if(blackPawns.get(i).getLeft().equals(whitePawns.get(j).getLeft() - 1) && blackPawns.get(i).getRight().equals(whitePawns.get(j).getRight() - 1) )
+					{
+						killers++;
+					}
+					if(blackPawns.get(i).getLeft().equals(whitePawns.get(j).getLeft() + 1) && blackPawns.get(i).getRight().equals(whitePawns.get(j).getRight() - 1) )
+					{
+						killers++;
+					}	
+				}
+				for(int j = 0; j < blackPawns.size(); j++)
+				{
+					if(i == j)
+					{
+						continue;
+					}
+					if(blackPawns.get(i).getLeft().equals(blackPawns.get(j).getLeft() - 1) && blackPawns.get(i).getRight().equals(blackPawns.get(j).getRight() + 1) )
+					{
+						defended++;
+					}
+					if(blackPawns.get(i).getLeft().equals(blackPawns.get(j).getLeft() + 1) && blackPawns.get(i).getRight().equals(blackPawns.get(j).getRight() + 1) )
+					{
+						defended++;
+					}	
+				}	
+			}
+			
+			if(player.equals("white"))
+			{
+				return (50 + (height - Wmax) - (Bmin - 1) + whitePawns.size() - blackPawns.size() - defended + killers);
+			}
+			else 
+			{
+				return (50 - (height - Wmax) + (Bmin - 1) - whitePawns.size() + blackPawns.size() + defended - killers);
+			}
+			
+		}
+		else if(isWhite())
+		{
+			ArrayList<Integer> legal = this.legalActions();
+			for(int i = 0; i < legal.size(); i +=4)
+			{
+				if(legal.get(i+3).equals(height))
+				{
+					if(player.equals("black"))
+					{
+						return 0;
+					}
 				}
 			}
 			for(int i = 0; i < whitePawns.size(); i++)
@@ -281,28 +325,35 @@ public class State {
 					if(whitePawns.get(i).getLeft().equals(blackPawns.get(j).getLeft() + 1) && whitePawns.get(i).getRight().equals(blackPawns.get(j).getRight() + 1) )
 					{
 						killers++;
-					}
-					if(whitePawns.get(i).getLeft().equals(blackPawns.get(j).getLeft() - 1) && whitePawns.get(i).getRight().equals(blackPawns.get(j).getRight() + 1) )
-					{
-						proteced++;
-					}
+					}	
 				}
-			}
-			return (50 - (height - Wmax) + (Bmin - 1) + whitePawns.size() - blackPawns.size());
-		}
-		else if(isWhite())
-		{
-			ArrayList<Integer> legal = this.legalActions();
-			for(int i = 0; i < legal.size(); i +=4)
-			{
-				if(legal.get(i+3).equals(height))
+				for(int j = 0; j < whitePawns.size(); j++)
 				{
-					return 0;
+					if(i == j)
+					{
+						continue;
+					}
+					if(whitePawns.get(i).getLeft().equals(whitePawns.get(j).getLeft() - 1) && whitePawns.get(i).getRight().equals(whitePawns.get(j).getRight() - 1) )
+					{
+						defended++;
+					}
+					if(whitePawns.get(i).getLeft().equals(whitePawns.get(j).getLeft() + 1) && whitePawns.get(i).getRight().equals(whitePawns.get(j).getRight() - 1) )
+					{
+						defended++;
+					}	
 				}
 			}
-			return (50 + (height - Wmax) - (Bmin - 1) - whitePawns.size() + blackPawns.size());
+			if(player.equals("black"))
+			{
+				return (50 + (height - Wmax) - (Bmin - 1) + whitePawns.size() - blackPawns.size() - defended + killers);
+			}
+			else 
+			{
+				return (50 - (height - Wmax) + (Bmin - 1) - whitePawns.size() + blackPawns.size() + defended - killers);
+			}
+			//return (50 + (height - Wmax) - (Bmin - 1) - whitePawns.size() + blackPawns.size());
 		}
-		return 0;
+		return -100;
 	}
 	
 	public Integer utility()
