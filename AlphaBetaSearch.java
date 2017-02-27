@@ -8,14 +8,16 @@ public class AlphaBetaSearch {
 	private Pair<Integer, Integer> bestActionTo;
 	private int cutoff;
 	private boolean first = true;
+	private long time;
 	ArrayList<Pair<Integer, Integer>> bestResult;
 	
-	AlphaBetaSearch()
+	AlphaBetaSearch(long time)
 	{
-		this.cutoff = 0;
+		this.cutoff = 1;
 		bestResult = new ArrayList<Pair<Integer, Integer>>();
 		bestActionFrom = new Pair<Integer, Integer>(-1, -1);
 		bestActionTo = new Pair<Integer, Integer>(-1, -1);
+		this.time = time;
 	}
 	
 	public ArrayList<Pair<Integer, Integer>> alphaBetaSearch(State state) {					
@@ -41,8 +43,8 @@ public class AlphaBetaSearch {
 					State temp = new State(state);		
 					temp.updateState(checkActionFrom, checkActionTo);
 
-
-					int fromMin = minValue(temp, alpha, beta, 0);
+					int co = cutoff;
+					int fromMin = minValue(temp, alpha, beta, co);
 					
 					if(fromMin > v)
 					{
@@ -58,22 +60,27 @@ public class AlphaBetaSearch {
 						}
 					}
 				}
+				if(alpha == 100) { break; }
 			}
-			catch(Exception x)
+			catch(TimeException x)
 			{
-				bestResult.add(bestActionFrom);
-				bestResult.add(bestActionTo);
 				break;
 			}
 			cutoff++;
 		}
 		
+		bestResult.add(bestActionFrom);
+		bestResult.add(bestActionTo);
+		
 		return bestResult;
 	}
 	
-	private int minValue(State state, int alpha, int beta, int depth) {
-		
-		if(state.terminalTest() || depth == cutoff)
+	private int minValue(State state, int alpha, int beta, int depth) throws TimeException {
+		if(System.currentTimeMillis() == time)
+		{
+			throw new TimeException();
+		}
+		if(state.terminalTest() || depth == 0)
 		{
 			int best = state.eval();
 			//System.out.println("BEST MOVE SAMKVAEMT EVAL() from min: " + Math.abs(best - depth) + "best is: " + best + " depth is: " + depth);
@@ -100,7 +107,7 @@ public class AlphaBetaSearch {
 			temp.updateState(checkActionFrom, checkActionTo);
 			temp.sort();
 			//System.out.println("minafter ? " + temp.isWhite());
-			int fromMax = maxValue(temp, alpha, beta, depth++);
+			int fromMax = maxValue(temp, alpha, beta, depth - 1);
 			
 			if(fromMax < v)
 			{
@@ -116,7 +123,7 @@ public class AlphaBetaSearch {
 		return v;
 	}
 
-	private int maxValue(State state, int alpha, int beta, int depth) {
+	private int maxValue(State state, int alpha, int beta, int depth) throws TimeException {
 		
 		/*if(state.terminalTest()) 
 		{
@@ -126,7 +133,11 @@ public class AlphaBetaSearch {
 		
 		//System.out.println("max: " + depth);
 		//System.out.println("depth: " + depth + ", cutoff: " + cutoff);
-		if(state.terminalTest() || depth == cutoff)
+		if(System.currentTimeMillis() == time)
+		{
+			throw new TimeException();
+		}
+		if(state.terminalTest() || depth == 0)
 		{	
 			int best = state.eval();
 			//System.out.println("BEST MOVE SAMKVAEMT EVAL() from max: " + Math.abs(best - depth) + "best is: " + best + " depth is: " + depth); 
@@ -151,7 +162,7 @@ public class AlphaBetaSearch {
 			temp.updateState(checkActionFrom, checkActionTo);
 			temp.sort();
 			//System.out.println("maxafter ? " + temp.isWhite());
-			int fromMin = minValue(temp, alpha, beta, depth++);
+			int fromMin = minValue(temp, alpha, beta, depth);
 			
 			if(fromMin > v)
 			{
