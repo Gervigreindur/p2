@@ -55,7 +55,6 @@ public class AlphaBetaSearch {
 
 						if(alpha >= beta )
 						{
-							//System.out.println("best action found!" + legalActions.get(i) + " " + legalActions.get(i + 1) + " " + legalActions.get(i + 2) + legalActions.get(i + 3));
 							break;
 						}
 					}
@@ -76,7 +75,7 @@ public class AlphaBetaSearch {
 	}
 	
 	private int minValue(State state, int alpha, int beta, int depth) throws TimeException {
-		if(System.currentTimeMillis() == time)
+		if(System.currentTimeMillis() >= time)
 		{
 			throw new TimeException();
 		}
@@ -107,7 +106,7 @@ public class AlphaBetaSearch {
 			temp.updateState(checkActionFrom, checkActionTo);
 			temp.sort();
 			//System.out.println("minafter ? " + temp.isWhite());
-			int fromMax = maxValue(temp, alpha, beta, depth - 1);
+			int fromMax = maxValue(temp, alpha, beta, depth -= 1);
 			
 			if(fromMax < v)
 			{
@@ -133,7 +132,7 @@ public class AlphaBetaSearch {
 		
 		//System.out.println("max: " + depth);
 		//System.out.println("depth: " + depth + ", cutoff: " + cutoff);
-		if(System.currentTimeMillis() == time)
+		if(System.currentTimeMillis() >= time)
 		{
 			throw new TimeException();
 		}
@@ -162,7 +161,7 @@ public class AlphaBetaSearch {
 			temp.updateState(checkActionFrom, checkActionTo);
 			temp.sort();
 			//System.out.println("maxafter ? " + temp.isWhite());
-			int fromMin = minValue(temp, alpha, beta, depth);
+			int fromMin = minValue(temp, alpha, beta, depth -= 1);
 			
 			if(fromMin > v)
 			{
