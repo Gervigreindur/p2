@@ -117,13 +117,7 @@ public class AlphaBetaSearch {
 	}
 
 	private int maxValue(State state, int alpha, int beta, int depth) {
-		
-		/*if(state.terminalTest()) 
-		{
-			//System.out.println("max depth: " + depth);
-			return state.utility();
-		}*/
-		
+				
 		//System.out.println("max: " + depth);
 		//System.out.println("depth: " + depth + ", cutoff: " + cutoff);
 		if(state.terminalTest() || depth == cutoff)
@@ -141,13 +135,7 @@ public class AlphaBetaSearch {
 			Pair<Integer, Integer> checkActionFrom = new Pair<Integer, Integer>(legalActions.get(i), legalActions.get(i + 1));
 			Pair<Integer, Integer> checkActionTo = new Pair<Integer, Integer>(legalActions.get(i + 2 ), legalActions.get(i + 3));
 			State temp = new State(state);
-			//System.out.println("before min called: is white? " + temp.isWhite() );
-			//System.out.println("from: " + checkActionFrom.getLeft() + " " + checkActionFrom.getRight());
-			//System.out.println("to: " + checkActionTo.getLeft() + " " + checkActionTo.getRight());
-			//System.out.println(legalActions);
-			//temp.printBoard();
-			//temp.printPawns();
-			//System.out.println("max before ? " + temp.isWhite());
+
 			temp.updateState(checkActionFrom, checkActionTo);
 			temp.sort();
 			//System.out.println("maxafter ? " + temp.isWhite());
