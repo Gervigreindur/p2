@@ -19,7 +19,9 @@ public class OurAgent implements Agent
 	*/
     public void init(String role, int width, int height, int playclock) {
 		this.role = role;
-		this.playclock = System.currentTimeMillis() + playclock - 100;
+		this.playclock = System.currentTimeMillis() + playclock * 1000 - 100;
+		System.out.println(this.playclock);
+		System.out.println(playclock);
 		myTurn = !role.equals("white");
 		this.width = width;
 		this.height = height;

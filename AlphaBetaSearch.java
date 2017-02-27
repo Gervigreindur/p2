@@ -77,11 +77,13 @@ public class AlphaBetaSearch {
 	private int minValue(State state, int alpha, int beta, int depth) throws TimeException {
 		if(System.currentTimeMillis() >= time)
 		{
+			System.out.println("time exceeded: " + depth + " " + System.currentTimeMillis());
 			throw new TimeException();
 		}
 		
 		if(state.terminalTest() || depth == 0)
 		{
+			
 			int best = state.eval();
 			//System.out.println("BEST MOVE SAMKVAEMT EVAL() from min: " + Math.abs(best - depth) + "best is: " + best + " depth is: " + depth);
 			return best;
@@ -129,6 +131,7 @@ public class AlphaBetaSearch {
 		//System.out.println("depth: " + depth + ", cutoff: " + cutoff);
 		if(System.currentTimeMillis() >= time)
 		{
+			System.out.println("time exceeded: " + depth + " " + System.currentTimeMillis());
 			throw new TimeException();
 		}
 		if(state.terminalTest() || depth == 0)

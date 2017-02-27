@@ -255,8 +255,10 @@ public class State {
 			{
 				if(legal.get(i+3).equals(1))
 				{
+					
 					if(player.equals("white"))
 					{
+						//System.out.println("eval() white turn: " + !isWhite() + "maxis" + player);
 						return 0;
 					}
 				}
@@ -310,6 +312,7 @@ public class State {
 				{
 					if(player.equals("black"))
 					{
+						//System.out.println("eval() white turn: " + !isWhite() + "maxis" + player);
 						return 0;
 					}
 				}
