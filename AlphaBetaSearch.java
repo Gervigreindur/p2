@@ -30,7 +30,7 @@ public class AlphaBetaSearch {
 		bestActionFrom = new Pair<Integer, Integer>(legalActions.get(0), legalActions.get(1));
 		bestActionTo = new Pair<Integer, Integer>(legalActions.get(2), legalActions.get(3));
 		
-		while(cutoff < 4 * state.getHeight() * state.width)
+		while(cutoff < 4 * State.getHeight() * state.width)
 		{
 			try
 			{
