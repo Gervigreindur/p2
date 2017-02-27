@@ -76,10 +76,11 @@ public class AlphaBetaSearch {
 	}
 	
 	private int minValue(State state, int alpha, int beta, int depth) throws TimeException {
-		if(System.currentTimeMillis() == time)
+		if(System.currentTimeMillis() >= time)
 		{
 			throw new TimeException();
 		}
+		
 		if(state.terminalTest() || depth == 0)
 		{
 			int best = state.eval();
@@ -127,7 +128,7 @@ public class AlphaBetaSearch {
 		
 		//System.out.println("max: " + depth);
 		//System.out.println("depth: " + depth + ", cutoff: " + cutoff);
-		if(System.currentTimeMillis() == time)
+		if(System.currentTimeMillis() >= time)
 		{
 			throw new TimeException();
 		}
