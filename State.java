@@ -8,7 +8,7 @@ import java.util.Set;
 
 public class State {
 	
-	private int height;
+	private static int height;
 	private int width;
 	private List<Pair<Integer, Integer>> whitePawns;
 	private List<Pair<Integer, Integer>> blackPawns;
@@ -22,7 +22,6 @@ public class State {
 	
 	public State(State barry)
 	{
-		this.height = barry.height;
 		this.width = barry.width;
 		coord = new Pair<Integer, Integer>(-1, -1);
 		this.whitePawns = new ArrayList<Pair<Integer, Integer>>();
@@ -42,7 +41,7 @@ public class State {
 	
 	State(int height, int width, String role)
 	{
-		this.height = height;
+		State.height = height;
 		this.width = width;
 		this.player = new String(role);
 		coord = new Pair<Integer, Integer>(0, 0);
@@ -257,14 +256,11 @@ public class State {
 		}
 		//System.out.println("-----------   Wmax: " + Wmax + "   ------------");
 		
-		int result = 0;
 		//System.out.println("-----------   Bmin: " + Bmin + "   ------------");
 		
 		if(!isWhite())
 		{
-			result = (100 - (height - Wmax) + (Bmin - 1) + whitePawns.size() - blackPawns.size());
-			//System.out.println(result);
-			return result;
+			return (100 - (height - Wmax) + (Bmin - 1) + whitePawns.size() - blackPawns.size());
 		}
 		else if(isWhite())
 		{
@@ -379,6 +375,11 @@ public class State {
 	public void sort() {
 		Collections.sort(whitePawns, Pair.decendingComparator);
 		Collections.sort(blackPawns, Pair.ascendingComparator);
+	}
+	
+	public static int getHeight()
+	{
+		return height;
 	}
 
 }
