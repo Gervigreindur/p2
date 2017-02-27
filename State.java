@@ -235,6 +235,58 @@ public class State {
 		return false;
 	}
 	
+	public int eval2()
+	{
+		if(goalTest())
+		{
+			return utility();
+		}
+		
+		int Wmax = 0;
+		int Bmin = height;
+
+		if(!whitePawns.isEmpty())
+		{
+			Wmax = whitePawns.get(0).getRight();
+		}
+ 
+		if(!blackPawns.isEmpty())
+		{
+			Bmin = blackPawns.get(0).getRight();
+		}
+		
+		if(isWhite())
+		{
+			if(player.equals("white"))
+			{
+				return (50 - (height - Wmax) - (Bmin - 1) - whitePawns.size() + blackPawns.size());
+
+			}
+			else if(player.equals("black"))
+			{
+				return -(50 - (height - Wmax) + (Bmin - 1) + whitePawns.size() - blackPawns.size());
+			}
+		}
+		else
+		{
+			if(player.equals("black"))
+			{
+				return (50 + (height - Wmax) - (Bmin - 1) - whitePawns.size() + blackPawns.size());
+			}
+			else if(player.equals("white"))
+			{
+
+				return -(50 + (height - Wmax) + (Bmin - 1) + whitePawns.size() - blackPawns.size());
+
+			}
+		}
+		
+		
+		System.out.println("framhjá öllu");
+		return 0;
+		
+		
+	}
 	public int eval() 
 	{       
 		if(goalTest())
