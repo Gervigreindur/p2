@@ -37,14 +37,14 @@ public class Pair<L,R> {
 	public int compare(Pair<Integer, Integer> o1, Pair<Integer, Integer> o2) {
 		  Integer y1 = o1.getRight();
 		  Integer y2 = o2.getRight();
-		  if(y1 == State.getHeight())
+		  /*if(y1 == State.getHeight())
 		  {
 			  return -1;
 		  }
 		  if(y2 == State.getHeight())
 		  {
 			  return 1;
-		  }
+		  }*/
 		  
 		  return y1 - y2;
 	}
@@ -56,14 +56,14 @@ public class Pair<L,R> {
 		public int compare(Pair<Integer, Integer> o1, Pair<Integer, Integer> o2) {
 			  Integer y1 = o1.getRight();
 			  Integer y2 = o2.getRight();
-			  if(y1 == 1)
+			 /* if(y1 == 1)
 			  {
 				  return -1;
 			  }
 			  if(y2 == 1)
 			  {
 				  return 1;
-			  }
+			  }*/
 			  return y2 - y1;
 		}
 	  };

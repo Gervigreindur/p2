@@ -260,11 +260,27 @@ public class State {
 		
 		if(!isWhite())
 		{
-			return (100 - (height - Wmax) + (Bmin - 1) + whitePawns.size() - blackPawns.size());
+			ArrayList<Integer> legal = this.legalActions();
+			for(int i = 0; i < legal.size(); i +=4)
+			{
+				if(legal.get(i+3).equals(1))
+				{
+					return 0;
+				}
+			}
+			return (50 - (height - Wmax) + (Bmin - 1) + whitePawns.size() - blackPawns.size());
 		}
 		else if(isWhite())
 		{
-			return (100 + (height - Wmax) - (Bmin - 1) - whitePawns.size() + blackPawns.size());
+			ArrayList<Integer> legal = this.legalActions();
+			for(int i = 0; i < legal.size(); i +=4)
+			{
+				if(legal.get(i+3).equals(height))
+				{
+					return 0;
+				}
+			}
+			return (50 + (height - Wmax) - (Bmin - 1) - whitePawns.size() + blackPawns.size());
 		}
 		return 0;
 	}

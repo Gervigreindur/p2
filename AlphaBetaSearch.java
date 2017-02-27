@@ -24,7 +24,7 @@ public class AlphaBetaSearch {
 		//System.out.println(legalActions);
 		int v = 0;
 		int alpha = 0;
-		int beta = 95;
+		int beta = 0;
 		bestActionFrom = new Pair<Integer, Integer>(legalActions.get(0), legalActions.get(1));
 		bestActionTo = new Pair<Integer, Integer>(legalActions.get(2), legalActions.get(3));
 		for(int i = 0; i < legalActions.size(); i += 4)
@@ -39,13 +39,13 @@ public class AlphaBetaSearch {
 			System.out.println("from main v is: " + v + " and beta is: " + beta);
 
 			
-			if(v > beta )
+			if(v >= beta )
 			{
 				beta = v;
 				bestActionFrom = new Pair<Integer, Integer>(legalActions.get(i), legalActions.get(i + 1));
 				bestActionTo = new Pair<Integer, Integer>(legalActions.get(i + 2), legalActions.get(i + 3));
 				System.out.println("best action found!" + legalActions.get(i) + " " + legalActions.get(i + 1) + " " + legalActions.get(i + 2) + legalActions.get(i + 3));
-				if(v >= 99)
+				if(v == 100)
 				{
 					break;
 				}
@@ -96,7 +96,7 @@ public class AlphaBetaSearch {
 			temp.sort();
 			//System.out.println("minafter ? " + temp.isWhite());
 			v = Math.min(v, maxValue(temp, alpha, beta, depth+1));
-			if(v >= 95)
+			if(v == 100)
 			{
 				//System.out.println("min: " + v);
 				break;
@@ -148,7 +148,7 @@ public class AlphaBetaSearch {
 			temp.sort();
 			//System.out.println("maxafter ? " + temp.isWhite());
 			v = Math.max(v, minValue(temp, alpha, beta, depth+1));
-			if(v >= 95)
+			if(v == 100)
 			{
 				//System.out.println("max: " + v);
 				break;
