@@ -19,7 +19,7 @@ public class OurAgent implements Agent
 	*/
     public void init(String role, int width, int height, int playclock) {
 		this.role = role;
-		this.playclock = System.currentTimeMillis() + playclock * 1000 - 100;
+		this.playclock = playclock;
 		System.out.println(this.playclock);
 		System.out.println(playclock);
 		myTurn = !role.equals("white");
@@ -57,9 +57,9 @@ public class OurAgent implements Agent
 			// TODO: 2. run alpha-beta search to determine the best move
 			// Here we just construct a random move (that will most likely not even be possible),
 			// this needs to be replaced with the actual best move.
-			AlphaBetaSearch abs = new AlphaBetaSearch(playclock);
+			AlphaBetaSearch abs = new AlphaBetaSearch();
 			
-			ArrayList<Pair<Integer, Integer>> nextMove = abs.alphaBetaSearch(environment);
+			ArrayList<Pair<Integer, Integer>> nextMove = abs.alphaBetaSearch(environment, playclock);
 
 			System.out.println("Our move: "  + nextMove.get(0).getLeft() + " " + nextMove.get(0).getRight() + " " + nextMove.get(1).getLeft() + " " + nextMove.get(1).getRight());
 			System.out.println(" ");

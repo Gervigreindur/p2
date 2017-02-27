@@ -11,17 +11,16 @@ public class AlphaBetaSearch {
 	private long time;
 	ArrayList<Pair<Integer, Integer>> bestResult;
 	
-	AlphaBetaSearch(long time)
+	AlphaBetaSearch()
 	{
 		this.cutoff = 1;
 		bestResult = new ArrayList<Pair<Integer, Integer>>();
 		bestActionFrom = new Pair<Integer, Integer>(-1, -1);
 		bestActionTo = new Pair<Integer, Integer>(-1, -1);
-		this.time = time;
 	}
 	
-	public ArrayList<Pair<Integer, Integer>> alphaBetaSearch(State state) {					
-		
+	public ArrayList<Pair<Integer, Integer>> alphaBetaSearch(State state, long playclock) {					
+	    time = System.currentTimeMillis() + playclock * 1000 - 100;
 		ArrayList<Integer> legalActions = state.legalActions();
 		//System.out.println(legalActions);
 		int v = -1;
@@ -77,7 +76,7 @@ public class AlphaBetaSearch {
 	private int minValue(State state, int alpha, int beta, int depth) throws TimeException {
 		if(System.currentTimeMillis() >= time)
 		{
-			//System.out.println("time exceeded: " + depth + " " + System.currentTimeMillis());
+			System.out.println("time exceeded: " + depth + " " + System.currentTimeMillis());
 			throw new TimeException();
 		}
 		
