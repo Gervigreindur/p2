@@ -9,17 +9,17 @@ public class AlphaBetaSearch {
 	private int cutoff;
 	private boolean first = true;
 	private long time;
-	ArrayList<Pair<Integer, Integer>> bestResult;
+	int[] bestResult;
 	
 	AlphaBetaSearch()
 	{
 		this.cutoff = 1;
-		bestResult = new ArrayList<Pair<Integer, Integer>>();
+		bestResult = new int[4];
 		bestActionFrom = new Pair<Integer, Integer>(-1, -1);
 		bestActionTo = new Pair<Integer, Integer>(-1, -1);
 	}
 	
-	public ArrayList<Pair<Integer, Integer>> alphaBetaSearch(State state, long playclock) {					
+	public int[] alphaBetaSearch(State state, long playclock) {					
 	    time = System.currentTimeMillis() + playclock * 1000 - 100;
 		ArrayList<Integer> legalActions = state.legalActions();
 		//System.out.println(legalActions);
@@ -67,8 +67,10 @@ public class AlphaBetaSearch {
 			cutoff++;
 		}
 		
-		bestResult.add(bestActionFrom);
-		bestResult.add(bestActionTo);
+		bestResult[0] = bestActionFrom.getLeft();
+		bestResult[1] = bestActionFrom.getRight();
+		bestResult[2] = bestActionTo.getLeft();
+		bestResult[3] = bestActionTo.getRight();
 		
 		return bestResult;
 	}

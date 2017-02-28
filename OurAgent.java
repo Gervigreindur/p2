@@ -59,11 +59,11 @@ public class OurAgent implements Agent
 			// this needs to be replaced with the actual best move.
 			AlphaBetaSearch abs = new AlphaBetaSearch();
 			
-			ArrayList<Pair<Integer, Integer>> nextMove = abs.alphaBetaSearch(environment, playclock);
+			int[] nextMove = abs.alphaBetaSearch(environment, playclock);
 
-			System.out.println("Our move: "  + nextMove.get(0).getLeft() + " " + nextMove.get(0).getRight() + " " + nextMove.get(1).getLeft() + " " + nextMove.get(1).getRight());
+			System.out.println("Our move: "  + nextMove[0] + " " + nextMove[1] + " " + nextMove[2] + " " + nextMove[3]);
 			System.out.println(" ");
-			return "(move " + nextMove.get(0).getLeft() + " " + nextMove.get(0).getRight() + " " + nextMove.get(1).getLeft() + " " + nextMove.get(1).getRight() + ")";
+			return "(move " + nextMove[0] + " " + nextMove[1] + " " + nextMove[2] + " " + nextMove[3] + ")";
 		} else {
 			return "noop";
 		}
