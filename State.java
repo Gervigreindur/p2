@@ -14,7 +14,7 @@ public class State {
 	private List<Pair<Integer, Integer>> blackPawns;
 	private Pair<Integer, Integer> coord;
 	public boolean whiteTurn;  	//white = true, black = false
-	public String player;
+	public String max;
 
 	public boolean isWhite() {
 		return whiteTurn;
@@ -26,7 +26,7 @@ public class State {
 		coord = new Pair<Integer, Integer>(-1, -1);
 		this.whitePawns = new ArrayList<Pair<Integer, Integer>>();
 		this.blackPawns = new ArrayList<Pair<Integer, Integer>>();
-		this.player = new String(barry.player);
+		this.max = new String(barry.max);
 		for(Pair<Integer, Integer> white : barry.whitePawns)
 		{
 			//System.out.print("white: " + white.getLeft() + " " +  white.getRight());
@@ -43,7 +43,7 @@ public class State {
 	{
 		State.height = height;
 		this.width = width;
-		this.player = new String(role);
+		this.max = new String(role);
 		coord = new Pair<Integer, Integer>(0, 0);
 		whitePawns = new ArrayList<Pair<Integer, Integer>>();
 		blackPawns = new ArrayList<Pair<Integer, Integer>>();
@@ -257,23 +257,23 @@ public class State {
 		
 		if(isWhite())
 		{
-			if(player.equals("white"))
+			if(max.equals("white"))
 			{
 				return (50 - (height - Wmax) - (Bmin - 1) - whitePawns.size() + blackPawns.size());
 
 			}
-			else if(player.equals("black"))
+			else if(max.equals("black"))
 			{
 				return -(50 - (height - Wmax) + (Bmin - 1) + whitePawns.size() - blackPawns.size());
 			}
 		}
 		else
 		{
-			if(player.equals("black"))
+			if(max.equals("black"))
 			{
 				return (50 + (height - Wmax) - (Bmin - 1) - whitePawns.size() + blackPawns.size());
 			}
-			else if(player.equals("white"))
+			else if(max.equals("white"))
 			{
 
 				return -(50 + (height - Wmax) + (Bmin - 1) + whitePawns.size() - blackPawns.size());
@@ -298,7 +298,16 @@ public class State {
 		int Bmin = 0;
 		int defended = 0;
 		int killers = 0;
-	
+		
+		if(!whitePawns.isEmpty())
+		{
+			Wmax = whitePawns.get(0).getRight();
+		}
+		if(!blackPawns.isEmpty())
+		{
+			Bmin = blackPawns.get(0).getRight();
+		}
+		
 		
 		if(!isWhite())
 		{
@@ -308,61 +317,7 @@ public class State {
 				if(legal.get(i+3).equals(1))
 				{
 					
-					if(player.equals("white"))
-					{
-						//System.out.println("eval() white turn: " + !isWhite() + "maxis" + player);
-						return 0;
-					}
-				}
-			}
-			for(int i = 0; i < blackPawns.size(); i++)
-			{
-				for(int j = 0; j < whitePawns.size(); j++)
-				{
-					if(blackPawns.get(i).getLeft().equals(whitePawns.get(j).getLeft() - 1) && blackPawns.get(i).getRight().equals(whitePawns.get(j).getRight() - 1) )
-					{
-						killers++;
-					}
-					if(blackPawns.get(i).getLeft().equals(whitePawns.get(j).getLeft() + 1) && blackPawns.get(i).getRight().equals(whitePawns.get(j).getRight() - 1) )
-					{
-						killers++;
-					}	
-				}
-				for(int j = 0; j < blackPawns.size(); j++)
-				{
-					if(i == j)
-					{
-						continue;
-					}
-					if(blackPawns.get(i).getLeft().equals(blackPawns.get(j).getLeft() - 1) && blackPawns.get(i).getRight().equals(blackPawns.get(j).getRight() + 1) )
-					{
-						defended++;
-					}
-					if(blackPawns.get(i).getLeft().equals(blackPawns.get(j).getLeft() + 1) && blackPawns.get(i).getRight().equals(blackPawns.get(j).getRight() + 1) )
-					{
-						defended++;
-					}	
-				}	
-			}
-			
-			if(player.equals("white"))
-			{
-				return (50 + (height - Wmax) - (Bmin - 1) + whitePawns.size() - blackPawns.size() + defended - killers);
-			}
-			else 
-			{
-				return (50 - (height - Wmax) + (Bmin - 1) - whitePawns.size() + blackPawns.size() - defended + killers);
-			}
-			
-		}
-		else if(isWhite())
-		{
-			ArrayList<Integer> legal = this.legalActions();
-			for(int i = 0; i < legal.size(); i +=4)
-			{
-				if(legal.get(i+3).equals(height))
-				{
-					if(player.equals("black"))
+					if(max.equals("white"))
 					{
 						//System.out.println("eval() white turn: " + !isWhite() + "maxis" + player);
 						return 0;
@@ -371,16 +326,15 @@ public class State {
 			}
 			for(int i = 0; i < whitePawns.size(); i++)
 			{
-				for(int j = 0; j < blackPawns.size(); j++)
+				coord.change(whitePawns.get(i).getLeft() - 1, whitePawns.get(i).getRight() + 1);
+				if(blackPawns.contains(coord))
 				{
-					if(whitePawns.get(i).getLeft().equals(blackPawns.get(j).getLeft() - 1) && whitePawns.get(i).getRight().equals(blackPawns.get(j).getRight() + 1) )
-					{
-						killers++;
-					}
-					if(whitePawns.get(i).getLeft().equals(blackPawns.get(j).getLeft() + 1) && whitePawns.get(i).getRight().equals(blackPawns.get(j).getRight() + 1) )
-					{
-						killers++;
-					}	
+					killers++;
+				}
+				coord.change(whitePawns.get(i).getLeft() + 1, whitePawns.get(i).getRight() + 1);
+				if(blackPawns.contains(coord))
+				{
+					killers++;
 				}
 				for(int j = 0; j < whitePawns.size(); j++)
 				{
@@ -398,34 +352,91 @@ public class State {
 					}	
 				}
 			}
-			if(player.equals("black"))
+			if(max.equals("white"))
 			{
-				return (50 + (height - Wmax) - (Bmin - 1) + whitePawns.size() - blackPawns.size() + defended - killers);
+				//System.out.println("isblack and max equals white: Wmax = " + Wmax + " Bmin = " + Bmin + " defended: " + defended + " killers: " + killers);
+				return (50 + Wmax - (height - Bmin + 1) + whitePawns.size() - blackPawns.size() + defended - killers);
 			}
 			else 
 			{
-				return (50 - (height - Wmax) + (Bmin - 1) - whitePawns.size() + blackPawns.size() - defended + killers);
+				//System.out.println("isBlack and max equals black: Wmax = " + Wmax + " Bmin = " + Bmin + " defended: " + defended + " killers: " + killers);
+				return (50 - Wmax + (height - Bmin + 1) + whitePawns.size() - blackPawns.size() - defended + killers);
+			}
+			
+		}
+		else if(isWhite())
+		{
+			ArrayList<Integer> legal = this.legalActions();
+			for(int i = 0; i < legal.size(); i +=4)
+			{
+				if(legal.get(i+3).equals(height))
+				{
+					if(max.equals("black"))
+					{
+						//System.out.println("eval() white turn: " + !isWhite() + "maxis" + player);
+						return 0;
+					}
+				}
+			}
+			for(int i = 0; i < blackPawns.size(); i++)
+			{
+				coord.change(blackPawns.get(i).getLeft() - 1, blackPawns.get(i).getRight() - 1);
+				if(whitePawns.contains(coord))
+				{
+					killers++;
+				}
+				coord.change(blackPawns.get(i).getLeft() + 1, blackPawns.get(i).getRight() - 1);
+				if(whitePawns.contains(coord))
+				{
+					killers++;
+				}
+				for(int j = 0; j < blackPawns.size(); j++)
+				{
+					if(i == j)
+					{
+						continue;
+					}
+					if(blackPawns.get(i).getLeft().equals(blackPawns.get(j).getLeft() - 1) && blackPawns.get(i).getRight().equals(blackPawns.get(j).getRight() + 1) )
+					{
+						defended++;
+					}
+					if(blackPawns.get(i).getLeft().equals(blackPawns.get(j).getLeft() + 1) && blackPawns.get(i).getRight().equals(blackPawns.get(j).getRight() + 1) )
+					{
+						defended++;
+					}	
+				}	
+			}
+			if(max.equals("white"))
+			{
+				//System.out.println("iswhite and max equals white: Wmax = " + Wmax + " Bmin = " + Bmin + " defended: " + defended + " killers: " + killers);
+				return (50 + Wmax - (height - Bmin + 1 ) + whitePawns.size() - blackPawns.size() - defended + killers );
+			}
+			else 
+			{
+				//System.out.println("iswhite and max equals black: Wmax = " + Wmax + " Bmin = " + Bmin + " defended: " + defended + " killers: " + killers);
+				return (50 - Wmax + (height - Bmin + 1) - whitePawns.size() + blackPawns.size() + defended - killers );
 			}
 			//return (50 + (height - Wmax) - (Bmin - 1) - whitePawns.size() + blackPawns.size());
 		}
+		System.out.println("Should not be here: from eval()");
 		return -100;
 	}
 	
 	public Integer utility()
 	{
-		if(player.equals("white") && !isWhite())
+		if(max.equals("white") && !isWhite())
 		{
 			return 100;
 		}
-		else if(player.equals("black") && isWhite())
+		else if(max.equals("black") && isWhite())
 		{
 			return 100;
 		}
-		else if(player.equals("white") && isWhite())
+		else if(max.equals("white") && isWhite())
 		{
 			return 0;
 		}
-		else if(player.equals("black") && !isWhite())
+		else if(max.equals("black") && !isWhite())
 		{
 			return 0;
 		}

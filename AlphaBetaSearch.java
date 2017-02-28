@@ -30,7 +30,7 @@ public class AlphaBetaSearch {
 		bestActionFrom = new Pair<Integer, Integer>(legalActions.get(0), legalActions.get(1));
 		bestActionTo = new Pair<Integer, Integer>(legalActions.get(2), legalActions.get(3));
 		
-		while(cutoff < 4 * State.getHeight() * state.width)
+		while(cutoff <  4 * (State.getHeight() - 1 ) * state.width)
 		{
 			try
 			{
@@ -76,6 +76,7 @@ public class AlphaBetaSearch {
 	}
 	
 	private int minValue(State state, int alpha, int beta, int depth) throws TimeException {
+		
 		if(System.currentTimeMillis() >= time)
 		{
 			System.out.println("time exceeded: " + depth + " " + System.currentTimeMillis());
@@ -86,7 +87,8 @@ public class AlphaBetaSearch {
 		{
 			
 			int best = state.eval();
-			//System.out.println("BEST MOVE SAMKVAEMT EVAL() from min: " + best + "best is: " + best + " depth is: " + depth);
+			//System.out.println("BEST MOVE SAMKVAEMT EVAL() from min to max: " + best + " depth is: " + (cutoff - depth) + " and min is white? " + state.isWhite());
+			//state.printBoard();
 			return best;
 			//eval*0.99^depth
 			//(eval-50)*0.99^depth
@@ -138,7 +140,8 @@ public class AlphaBetaSearch {
 		if(state.terminalTest() || depth == 0)
 		{	
 			int best = state.eval();
-			//System.out.println("BEST MOVE SAMKVAEMT EVAL() from max: " + best + "best is: " + best + " depth is: " + depth); 
+			//System.out.println("BEST MOVE SAMKVAEMT EVAL() from max to min: " + best + " depth is: " + (cutoff - depth) + " and max is white? " + state.isWhite());
+			//state.printBoard();
 			return best;
 		}
 		
