@@ -259,24 +259,24 @@ public class State {
 		{
 			if(max.equals("white"))
 			{
-				return (50 - (height - Wmax) - (Bmin - 1) - whitePawns.size() + blackPawns.size());
+				return (50 + Wmax - (height - Bmin + 1) + whitePawns.size() - blackPawns.size());
 
 			}
 			else if(max.equals("black"))
 			{
-				return -(50 - (height - Wmax) + (Bmin - 1) + whitePawns.size() - blackPawns.size());
+				return -(50 + Wmax - (height - Bmin + 1) + whitePawns.size() - blackPawns.size());
 			}
 		}
 		else
 		{
 			if(max.equals("black"))
 			{
-				return (50 + (height - Wmax) - (Bmin - 1) - whitePawns.size() + blackPawns.size());
+				return -(50 + Wmax - (height - Bmin + 1) + whitePawns.size() - blackPawns.size());
 			}
 			else if(max.equals("white"))
 			{
 
-				return -(50 + (height - Wmax) + (Bmin - 1) + whitePawns.size() - blackPawns.size());
+				return (50 + Wmax - (height - Bmin + 1) + whitePawns.size() - blackPawns.size());
 
 			}
 		}

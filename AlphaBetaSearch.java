@@ -24,8 +24,8 @@ public class AlphaBetaSearch {
 		ArrayList<Integer> legalActions = state.legalActions();
 		//System.out.println(legalActions);
 		int v = -1;
-		int alpha = -1;
-		int beta = 101;
+		int alpha = 0;
+		int beta = 100;
 		
 		bestActionFrom = new Pair<Integer, Integer>(legalActions.get(0), legalActions.get(1));
 		bestActionTo = new Pair<Integer, Integer>(legalActions.get(2), legalActions.get(3));
