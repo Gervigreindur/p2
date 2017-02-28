@@ -322,6 +322,10 @@ public class State {
 						//System.out.println("eval() white turn: " + !isWhite() + "maxis" + player);
 						return 0;
 					}
+					else
+					{
+						return 100;
+					}
 				}
 			}
 			for(int i = 0; i < whitePawns.size(); i++)
@@ -344,11 +348,11 @@ public class State {
 					}
 					if(whitePawns.get(i).getLeft().equals(whitePawns.get(j).getLeft() - 1) && whitePawns.get(i).getRight().equals(whitePawns.get(j).getRight() - 1) )
 					{
-						defended++;
+						defended += 2;
 					}
 					if(whitePawns.get(i).getLeft().equals(whitePawns.get(j).getLeft() + 1) && whitePawns.get(i).getRight().equals(whitePawns.get(j).getRight() - 1) )
 					{
-						defended++;
+						defended += 2;
 					}	
 				}
 			}
@@ -360,7 +364,7 @@ public class State {
 			else 
 			{
 				//System.out.println("isBlack and max equals black: Wmax = " + Wmax + " Bmin = " + Bmin + " defended: " + defended + " killers: " + killers);
-				return (50 - Wmax + (height - Bmin + 1) + whitePawns.size() - blackPawns.size() - defended + killers);
+				return (50 - Wmax + (height - Bmin + 1) - whitePawns.size() + blackPawns.size() - defended + killers);
 			}
 			
 		}
@@ -375,6 +379,10 @@ public class State {
 					{
 						//System.out.println("eval() white turn: " + !isWhite() + "maxis" + player);
 						return 0;
+					}
+					else
+					{
+						return 100;
 					}
 				}
 			}
@@ -398,11 +406,11 @@ public class State {
 					}
 					if(blackPawns.get(i).getLeft().equals(blackPawns.get(j).getLeft() - 1) && blackPawns.get(i).getRight().equals(blackPawns.get(j).getRight() + 1) )
 					{
-						defended++;
+						defended += 2;
 					}
 					if(blackPawns.get(i).getLeft().equals(blackPawns.get(j).getLeft() + 1) && blackPawns.get(i).getRight().equals(blackPawns.get(j).getRight() + 1) )
 					{
-						defended++;
+						defended += 2;
 					}	
 				}	
 			}
