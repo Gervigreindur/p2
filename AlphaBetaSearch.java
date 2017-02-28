@@ -49,6 +49,7 @@ public class AlphaBetaSearch {
 					{
 						v = fromMin;
 						alpha = Math.max(alpha, v);
+						
 						bestActionFrom = new Pair<Integer, Integer>(legalActions.get(i), legalActions.get(i + 1));
 						bestActionTo = new Pair<Integer, Integer>(legalActions.get(i + 2), legalActions.get(i + 3));
 
@@ -58,7 +59,7 @@ public class AlphaBetaSearch {
 						}
 					}
 				}
-				if(alpha == 100) { break; }
+				if(alpha >= 95) { break; }
 			}
 			catch(TimeException x)
 			{
@@ -89,6 +90,9 @@ public class AlphaBetaSearch {
 			int best = state.eval();
 			//System.out.println("BEST MOVE SAMKVAEMT EVAL() from min to max: " + best + " depth is: " + (cutoff - depth) + " and min is white? " + state.isWhite());
 			//state.printBoard();
+			best = (int) (best * Math.pow(0.99, ((cutoff-depth)/4)));
+			//System.out.println("BEST After calc from min to max: " + best + " depth is: " + (cutoff - depth) + " and min is white? " + state.isWhite());
+
 			return best;
 			//eval*0.99^depth
 			//(eval-50)*0.99^depth
@@ -120,7 +124,6 @@ public class AlphaBetaSearch {
 				beta = Math.min(beta, v);
 				if(beta >= alpha )
 				{
-					//System.out.println("best action found!" + legalActions.get(i) + " " + legalActions.get(i + 1) + " " + legalActions.get(i + 2) + legalActions.get(i + 3));
 					break;
 				}
 			}
@@ -137,10 +140,14 @@ public class AlphaBetaSearch {
 			System.out.println("time exceeded: " + depth + " " + System.currentTimeMillis());
 			throw new TimeException();
 		}
+		
 		if(state.terminalTest() || depth == 0)
 		{	
 			int best = state.eval();
+			
 			//System.out.println("BEST MOVE SAMKVAEMT EVAL() from max to min: " + best + " depth is: " + (cutoff - depth) + " and max is white? " + state.isWhite());
+			best = (int) (best * Math.pow(0.99, -((cutoff-depth)/4)));
+			//System.out.println("BEST After Calc from max to min: " + best + " depth is: " + (cutoff - depth) + " and max is white? " + state.isWhite());
 			//state.printBoard();
 			return best;
 		}
@@ -165,7 +172,6 @@ public class AlphaBetaSearch {
 				alpha = Math.max(alpha, v);
 				if(alpha >= beta )
 				{
-					//System.out.println("best action found!" + legalActions.get(i) + " " + legalActions.get(i + 1) + " " + legalActions.get(i + 2) + legalActions.get(i + 3));
 					break;
 				}
 			}

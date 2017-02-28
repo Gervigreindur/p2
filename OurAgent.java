@@ -47,7 +47,7 @@ public class OurAgent implements Agent
     		//System.out.println("env.white(): " + environment.isWhite() + " roleLastPlayer: " + roleOfLastPlayer);
     		environment.sort();
     		environment.printBoard();
-    		environment.printPawns();
+    		//environment.printPawns();
     	}
 		
     	// update turn (above this line the myTurn is still for the previous state)
