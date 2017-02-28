@@ -320,11 +320,11 @@ public class State {
 					if(max.equals("white"))
 					{
 						//System.out.println("eval() white turn: " + !isWhite() + "maxis" + player);
-						return 100;
+						return 0;
 					}
 					else
 					{
-						return 0;
+						return 100;
 					}
 				}
 			}
@@ -378,11 +378,11 @@ public class State {
 					if(max.equals("black"))
 					{
 						//System.out.println("eval() white turn: " + !isWhite() + "maxis" + player);
-						return 100;
+						return 0;
 					}
 					else
 					{
-						return 0;
+						return 100;
 					}
 				}
 			}
