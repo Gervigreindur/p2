@@ -348,11 +348,11 @@ public class State {
 					}
 					if(whitePawns.get(i).getLeft().equals(whitePawns.get(j).getLeft() - 1) && whitePawns.get(i).getRight().equals(whitePawns.get(j).getRight() - 1) )
 					{
-						defended ++;
+						defended++;
 					}
 					if(whitePawns.get(i).getLeft().equals(whitePawns.get(j).getLeft() + 1) && whitePawns.get(i).getRight().equals(whitePawns.get(j).getRight() - 1) )
 					{
-						defended ++;
+						defended++;
 					}	
 				}
 			}
@@ -391,12 +391,12 @@ public class State {
 				coord.change(blackPawns.get(i).getLeft() - 1, blackPawns.get(i).getRight() - 1);
 				if(whitePawns.contains(coord))
 				{
-					killers+=2;
+					killers++;
 				}
 				coord.change(blackPawns.get(i).getLeft() + 1, blackPawns.get(i).getRight() - 1);
 				if(whitePawns.contains(coord))
 				{
-					killers+=2;
+					killers++;
 				}
 				for(int j = 0; j < blackPawns.size(); j++)
 				{
@@ -406,11 +406,11 @@ public class State {
 					}
 					if(blackPawns.get(i).getLeft().equals(blackPawns.get(j).getLeft() - 1) && blackPawns.get(i).getRight().equals(blackPawns.get(j).getRight() + 1) )
 					{
-						defended+=5;
+						defended++;
 					}
 					if(blackPawns.get(i).getLeft().equals(blackPawns.get(j).getLeft() + 1) && blackPawns.get(i).getRight().equals(blackPawns.get(j).getRight() + 1) )
 					{
-						defended+=5;
+						defended++;
 					}	
 				}	
 			}
