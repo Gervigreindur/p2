@@ -29,7 +29,6 @@ public class State {
 		this.max = new String(barry.max);
 		for(Pair<Integer, Integer> white : barry.whitePawns)
 		{
-			//System.out.print("white: " + white.getLeft() + " " +  white.getRight());
 			whitePawns.add(new Pair<Integer, Integer>(white.getLeft(), white.getRight()));
 		}
 		for(Pair<Integer, Integer> black : barry.blackPawns)
@@ -159,7 +158,6 @@ public class State {
 
 	public void updateState(Pair<Integer, Integer> from,Pair<Integer, Integer> to)
 	{	
-		//System.out.println("UpdateState white is: " + white);
 		if (whiteTurn) 
 		{
 			int temp = whitePawns.indexOf(from);
@@ -169,7 +167,6 @@ public class State {
 				whitePawns.add(to);
 				if(blackPawns.contains(to))
 				{
-					//System.out.println("removed BLACK Pawn at: " + blackPawns.indexOf(to) + " " + blackPawns.get(blackPawns.indexOf(to)).getLeft() + " " + blackPawns.get(blackPawns.indexOf(to)).getRight());
 					blackPawns.remove(blackPawns.indexOf(to));
 				}
 			}	
@@ -183,21 +180,13 @@ public class State {
 				blackPawns.add(to);
 				if(whitePawns.contains(to))
 				{
-					//System.out.println("removed White Pawn at: " + whitePawns.indexOf(to) + " " + whitePawns.get(whitePawns.indexOf(to)).getLeft() + " " + whitePawns.get(whitePawns.indexOf(to)).getRight());
 					whitePawns.remove(whitePawns.indexOf(to));
 				}
 			}
 		}
 		whiteTurn = !whiteTurn;
 	}
-	/*
-	public State result(Pair<Integer, Integer> from, Pair<Integer, Integer>to)
-	{
-		State nextState = new State(state);
-		nextState.updateState(from, to);
-		return nextState;
-	}
-	*/
+
 	public boolean terminalTest()
 	{
 		if(this.legalActions().isEmpty() || goalTest())
@@ -416,7 +405,6 @@ public class State {
 					
 					if(max.equals("white"))
 					{
-						//System.out.println("eval() white turn: " + !isWhite() + "maxis" + player);
 						return 0;
 					}
 					else
@@ -427,14 +415,10 @@ public class State {
 			}
 			if(max.equals("white"))
 			{
-				
-				//System.out.println("isblack and max equals white: Wmax = " + Wmax + " Bmin = " + Bmin + " defended: " + defended + " killers: " + killers + "white ex: " + whiteExceeded + " black ex: " + blackExceeded);
 				return (50 + Wmax - (height - Bmin + 1) + whitePawns.size() - blackPawns.size() + whiteDefended - blackDefended + blackUnDefended - whiteUnDefended -whiteAttackable + whiteExceeded - blackExceeded);
 			}
 			else 
-			{
-				
-				//System.out.println("isBlack and max equals black: Wmax = " + Wmax + " Bmin = " + Bmin + " defended: " + defended + " killers: " + killers + "white ex: " + whiteExceeded + " black ex: " + blackExceeded);
+			{				
 				return (50 - Wmax + (height - Bmin + 1) - whitePawns.size() + blackPawns.size() - whiteDefended + blackDefended - blackUnDefended + whiteUnDefended + whiteAttackable - whiteExceeded + blackExceeded);
 			}
 			
@@ -448,7 +432,6 @@ public class State {
 				{
 					if(max.equals("black"))
 					{
-						//System.out.println("eval() white turn: " + !isWhite() + "maxis" + player);
 						return 0;
 					}
 					else
@@ -459,16 +442,12 @@ public class State {
 			}
 			if(max.equals("white"))
 			{
-				//System.out.println("iswhite and max equals white: Wmax = " + Wmax + " Bmin = " + Bmin + " defended: " + defended + " killers: " + killers + "white ex: " + whiteExceeded + " black ex: " + blackExceeded);
 				return (50 + Wmax - (height - Bmin + 1 ) + whitePawns.size() - blackPawns.size() + whiteDefended - whiteUnDefended - blackDefended + blackUnDefended + blackAttackable + whiteExceeded - blackExceeded );
 			}
 			else 
 			{
-				
-				//System.out.println("iswhite and max equals black: Wmax = " + Wmax + " Bmin = " + Bmin + " defended: " + defended + " killers: " + killers + "white ex: " + whiteExceeded + " black ex: " + blackExceeded);
 				return (50 - Wmax + (height - Bmin + 1) - whitePawns.size() + blackPawns.size() -whiteDefended + whiteUnDefended + blackDefended - blackUnDefended - blackAttackable - whiteExceeded + blackExceeded);
 			}
-			//return (50 + (height - Wmax) - (Bmin - 1) - whitePawns.size() + blackPawns.size());
 		}
 		System.out.println("Should not be here: from eval()");
 		return -100;

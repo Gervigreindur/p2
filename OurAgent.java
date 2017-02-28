@@ -44,10 +44,9 @@ public class OurAgent implements Agent
    			System.out.println(roleOfLastPlayer + " moved from " + x1 + "," + y1 + " to " + x2 + "," + y2);
     		// TODO: 1. update your internal world model according to the action that was just executed
     		environment.updateState(new Pair<Integer, Integer>(x1, y1), new Pair<Integer, Integer>(x2, y2));
-    		//System.out.println("env.white(): " + environment.isWhite() + " roleLastPlayer: " + roleOfLastPlayer);
     		environment.sort();
     		environment.printBoard();
-    		//environment.printPawns();
+ 
     	}
 		
     	// update turn (above this line the myTurn is still for the previous state)
