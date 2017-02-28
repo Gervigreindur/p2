@@ -35,16 +35,15 @@ public class Pair<L,R> {
 	  
 	@Override
 	public int compare(Pair<Integer, Integer> o1, Pair<Integer, Integer> o2) {
-		  Integer y1 = o1.getRight();
-		  Integer y2 = o2.getRight();
-		  /*if(y1 == State.getHeight())
+		  int y1 = o1.getRight();
+		  int y2 = o2.getRight();
+		  
+		  if(y1 - y2 == 0)
 		  {
-			  return -1;
+			  int x1 = o1.getLeft();
+			  int x2 = o2.getLeft();
+			  return x1 - y1;
 		  }
-		  if(y2 == State.getHeight())
-		  {
-			  return 1;
-		  }*/
 		  
 		  return y1 - y2;
 	}
@@ -54,16 +53,14 @@ public class Pair<L,R> {
 	  
 		@Override
 		public int compare(Pair<Integer, Integer> o1, Pair<Integer, Integer> o2) {
-			  Integer y1 = o1.getRight();
-			  Integer y2 = o2.getRight();
-			 /* if(y1 == 1)
+			  int y1 = o1.getRight();
+			  int y2 = o2.getRight();
+			  if(y2 - y1 == 0)
 			  {
-				  return -1;
+				  int x1 = o1.getLeft();
+				  int x2 = o2.getLeft();
+				  return x2 - x1;
 			  }
-			  if(y2 == 1)
-			  {
-				  return 1;
-			  }*/
 			  return y2 - y1;
 		}
 	  };
