@@ -298,16 +298,34 @@ public class State {
 		int Bmin = 0;
 		int defended = 0;
 		int killers = 0;
+		int whiteExceeded = 0;
+		int blackExceeded = 0;
 		
 		if(!whitePawns.isEmpty())
 		{
 			Wmax = whitePawns.get(0).getRight();
+			
 		}
 		if(!blackPawns.isEmpty())
 		{
 			Bmin = blackPawns.get(0).getRight();
 		}
 		
+		for(Pair<Integer, Integer> x : blackPawns)
+		{
+			if(x.getRight() < Wmax)
+			{
+				blackExceeded++;
+			}
+		}
+		for(Pair<Integer, Integer> x : whitePawns)
+		{
+			if(x.getRight() > Bmin)
+			{
+				whiteExceeded++;
+			}
+		}
+
 		
 		if(!isWhite())
 		{
@@ -328,6 +346,7 @@ public class State {
 					}
 				}
 			}
+
 			for(int i = 0; i < whitePawns.size(); i++)
 			{
 				coord.change(whitePawns.get(i).getLeft() - 1, whitePawns.get(i).getRight() + 1);
@@ -358,13 +377,13 @@ public class State {
 			}
 			if(max.equals("white"))
 			{
-				//System.out.println("isblack and max equals white: Wmax = " + Wmax + " Bmin = " + Bmin + " defended: " + defended + " killers: " + killers);
-				return (50 + Wmax - (height - Bmin + 1) + whitePawns.size() - blackPawns.size() + defended - killers);
+				//System.out.println("isblack and max equals white: Wmax = " + Wmax + " Bmin = " + Bmin + " defended: " + defended + " killers: " + killers + "white ex: " + whiteExceeded + " black ex: " + blackExceeded);
+				return (50 + Wmax - (height - Bmin + 1) + whitePawns.size() - blackPawns.size() + defended - killers + whiteExceeded - blackExceeded);
 			}
 			else 
 			{
-				//System.out.println("isBlack and max equals black: Wmax = " + Wmax + " Bmin = " + Bmin + " defended: " + defended + " killers: " + killers);
-				return (50 - Wmax + (height - Bmin + 1) - whitePawns.size() + blackPawns.size() - defended + killers);
+				//System.out.println("isBlack and max equals black: Wmax = " + Wmax + " Bmin = " + Bmin + " defended: " + defended + " killers: " + killers + "white ex: " + whiteExceeded + " black ex: " + blackExceeded);
+				return (50 - Wmax + (height - Bmin + 1) - whitePawns.size() + blackPawns.size() - defended + killers - whiteExceeded + blackExceeded);
 			}
 			
 		}
@@ -416,13 +435,13 @@ public class State {
 			}
 			if(max.equals("white"))
 			{
-				//System.out.println("iswhite and max equals white: Wmax = " + Wmax + " Bmin = " + Bmin + " defended: " + defended + " killers: " + killers);
-				return (50 + Wmax - (height - Bmin + 1 ) + whitePawns.size() - blackPawns.size() - defended + killers );
+				//System.out.println("iswhite and max equals white: Wmax = " + Wmax + " Bmin = " + Bmin + " defended: " + defended + " killers: " + killers + "white ex: " + whiteExceeded + " black ex: " + blackExceeded);
+				return (50 + Wmax - (height - Bmin + 1 ) + whitePawns.size() - blackPawns.size() - defended + killers + whiteExceeded - blackExceeded );
 			}
 			else 
 			{
-				//System.out.println("iswhite and max equals black: Wmax = " + Wmax + " Bmin = " + Bmin + " defended: " + defended + " killers: " + killers);
-				return (50 - Wmax + (height - Bmin + 1) - whitePawns.size() + blackPawns.size() + defended - killers );
+				//System.out.println("iswhite and max equals black: Wmax = " + Wmax + " Bmin = " + Bmin + " defended: " + defended + " killers: " + killers + "white ex: " + whiteExceeded + " black ex: " + blackExceeded);
+				return (50 - Wmax + (height - Bmin + 1) - whitePawns.size() + blackPawns.size() + defended - killers - whiteExceeded + blackExceeded);
 			}
 			//return (50 + (height - Wmax) - (Bmin - 1) - whitePawns.size() + blackPawns.size());
 		}

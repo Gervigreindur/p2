@@ -59,7 +59,7 @@ public class AlphaBetaSearch {
 						}
 					}
 				}
-				if(alpha >= 98) { break; }
+				if(alpha >= 99) { break; }
 			}
 			catch(TimeException x)
 			{
